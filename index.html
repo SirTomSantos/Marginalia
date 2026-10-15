@@ -1,0 +1,1820 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Marginalia</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#3b4cca">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Marginalia">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#eceff3; --surface:#fbfbfd; --ink:#1c2333; --muted:#657089; --line:#d9dee7;
+  --accent:#3b4cca; --accent-ink:#ffffff; --danger:#b3261e; --card:#f1f3fb;
+  --c-yellow:#ffe680; --c-green:#bfe9b0; --c-pink:#ffc6d6; --c-blue:#b9d9ff;
+  --u-yellow:#c99700; --u-green:#2e9a4d; --u-pink:#d0366a; --u-blue:#2f6fd6;
+  --p-yellow:rgba(255,214,0,.55); --p-green:rgba(80,200,100,.5); --p-pink:rgba(255,95,150,.45); --p-blue:rgba(70,150,255,.45);
+  --serif:'Literata',Georgia,'Times New Roman',serif; --sans:'DM Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  color-scheme:light;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#12151c; --surface:#1a1e28; --ink:#e7eaf2; --muted:#98a2b8; --line:#2b3140;
+    --accent:#8c9bff; --accent-ink:#10131c; --danger:#ff8a80; --card:#222838;
+    --c-yellow:#6b5a14; --c-green:#2d5a30; --c-pink:#6e2b43; --c-blue:#244a78;
+    --u-yellow:#f0c53d; --u-green:#6fd28a; --u-pink:#ff86ad; --u-blue:#78b2ff;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#12151c; --surface:#1a1e28; --ink:#e7eaf2; --muted:#98a2b8; --line:#2b3140;
+  --accent:#8c9bff; --accent-ink:#10131c; --danger:#ff8a80; --card:#222838;
+  --c-yellow:#6b5a14; --c-green:#2d5a30; --c-pink:#6e2b43; --c-blue:#244a78;
+  --u-yellow:#f0c53d; --u-green:#6fd28a; --u-pink:#ff86ad; --u-blue:#78b2ff;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-text-size-adjust:100%}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px 140px}
+.wrap.wide{max-width:1000px}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;background:var(--bg);display:flex;align-items:center;gap:8px;padding:12px 0;border-bottom:1px solid var(--line)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:41}
+.brand{font-family:var(--serif);font-weight:600;font-size:1.25rem;letter-spacing:-.01em;flex:1}
+.ghost{background:none;border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-size:.9rem}
+.primary{background:var(--accent);color:var(--accent-ink);border:0;border-radius:10px;padding:10px 14px;font-weight:500;font-size:.9rem}
+.danger{color:var(--danger)}
+.zoom{min-width:44px;text-align:center;color:var(--muted);font-size:.85rem}
+input[type=search],input[type=text],textarea{width:100%;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font:inherit;font-size:.95rem}
+textarea{resize:vertical;min-height:90px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.lib-actions{margin:16px 0}
+.doc{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:10px}
+.doc h3{margin:0 0 4px;font-family:var(--serif);font-size:1.08rem;font-weight:600}
+.doc .meta{color:var(--muted);font-size:.82rem}
+.doc .open{all:unset;cursor:pointer;display:block;width:100%}
+.hit{margin-top:8px;padding:8px 10px;background:var(--card);border-radius:8px;font-size:.85rem;color:var(--muted)}
+.hit b{color:var(--ink);font-weight:500}
+.empty{color:var(--muted);text-align:center;padding:36px 0}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;margin:14px 0}
+
+h1.title{font-family:var(--serif);font-size:1.6rem;line-height:1.2;margin:20px 0 6px;font-weight:600;letter-spacing:-.01em}
+.hint{color:var(--muted);font-size:.85rem;margin:0 0 14px}
+.notesbtn{width:100%;display:flex;justify-content:space-between;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-weight:500}
+.notesbtn .chev{transition:transform .2s}
+.notesbtn[aria-expanded=true] .chev{transform:rotate(180deg)}
+.notes-list{background:var(--surface);border:1px solid var(--line);border-top:0;border-radius:0 0 12px 12px;margin-top:-10px;padding:10px 12px 12px}
+.note-item{border-left:4px solid var(--line);padding:6px 0 6px 10px;margin:10px 0;cursor:pointer}
+.note-item small{color:var(--muted);font-size:.75rem}
+.note-item q{display:block;font-family:var(--serif);font-size:.9rem;color:var(--muted);quotes:none;font-style:italic}
+.note-item p{margin:4px 0 0;font-size:.92rem;white-space:pre-wrap}
+.note-item p.none{color:var(--muted)}
+
+/* text reader */
+#text{font-family:var(--serif);font-size:1.1rem;line-height:1.95;white-space:pre-wrap;margin-top:18px;padding:4px 0}
+#text span[data-s]{cursor:text;transition:background-color .3s}
+#text span.has{cursor:pointer}
+.flash{outline:3px solid var(--accent);outline-offset:2px;border-radius:4px}
+.marker{display:inline-block;vertical-align:super;font:500 .72rem var(--sans);background:var(--accent);color:var(--accent-ink);border:0;border-radius:999px;padding:0 6px;margin-left:3px;line-height:1.5;white-space:normal}
+.notecard{display:block;white-space:normal;font-family:var(--sans);font-size:.95rem;line-height:1.5;background:var(--card);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:10px;padding:10px;margin:8px 0 10px;animation:open .18s ease-out}
+@keyframes open{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.notecard{animation:none}}
+.notecard textarea{min-height:70px;margin:6px 0}
+.notecard .lbl{font-size:.8rem;color:var(--muted)}
+.notecard .row{justify-content:space-between}
+.swatches{display:flex;gap:8px}
+.sw{width:28px;height:28px;border-radius:50%;border:2px solid transparent;padding:0}
+.sw.sel{border-color:var(--ink)}
+.sw[data-c=yellow]{background:var(--c-yellow);box-shadow:inset 0 0 0 1px var(--u-yellow)}
+.sw[data-c=green]{background:var(--c-green);box-shadow:inset 0 0 0 1px var(--u-green)}
+.sw[data-c=pink]{background:var(--c-pink);box-shadow:inset 0 0 0 1px var(--u-pink)}
+.sw[data-c=blue]{background:var(--c-blue);box-shadow:inset 0 0 0 1px var(--u-blue)}
+
+/* pdf reader */
+#pages{margin-top:16px;overflow-x:auto;padding-bottom:20px}
+.page{position:relative;margin:0 auto 14px;background:#fff;color:#111;box-shadow:0 1px 3px rgba(0,0,0,.25),0 8px 24px rgba(0,0,0,.12)}
+.page .ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#9aa1b0;font-size:.85rem}
+.page canvas{position:absolute;left:0;top:0;z-index:0}
+.textLayer{position:absolute;left:0;top:0;overflow:hidden;line-height:1;z-index:2;-webkit-user-select:text;user-select:text}
+.textLayer span{position:absolute;white-space:pre;color:transparent;cursor:text;transform-origin:0 0}
+.textLayer ::selection{background:rgba(59,76,202,.35)}
+.al,.nl{position:absolute;inset:0;pointer-events:none}
+.al{z-index:1}
+.nl{z-index:30}
+.al .hl{position:absolute;mix-blend-mode:multiply;border-radius:2px}
+.al .ul{position:absolute;border-bottom:2px solid}
+.al .ci{position:absolute;border:2px solid;border-radius:14px}
+.nl .marker{position:absolute;pointer-events:auto;transform:translateY(-60%);vertical-align:baseline;margin:0}
+.pcard{position:absolute;pointer-events:auto;width:min(320px,calc(100% - 16px));background:var(--card);color:var(--ink);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:10px;padding:10px;font-size:.92rem;line-height:1.45;box-shadow:0 8px 24px rgba(0,0,0,.25);animation:open .18s ease-out}
+.pcard textarea{min-height:70px;margin:6px 0}
+.pcard .lbl{font-size:.8rem;color:var(--muted)}
+.pcard .row{justify-content:space-between}
+.pcard q{display:block;font-style:italic;color:var(--muted);font-size:.82rem;quotes:none;margin-bottom:2px}
+
+/* notes tab, tags, links */
+.tagrow{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0}
+.tagchip{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:3px 10px;font-size:.8rem;color:var(--ink)}
+.tagchip.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin:4px 0}
+.links{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin:6px 0}
+.linkchip{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:999px;background:var(--surface);overflow:hidden;max-width:100%}
+.linkchip .lk{background:none;border:0;padding:3px 8px;font-size:.78rem;text-align:left;white-space:normal}
+.linkchip .x{background:none;border:0;border-left:1px solid var(--line);padding:3px 8px;color:var(--muted)}
+.linkchip.back{border-style:dashed}
+.small{padding:3px 10px;font-size:.78rem}
+.nitem{border-left:4px solid var(--line);background:var(--surface);border-radius:10px;padding:10px 12px;margin:10px 0;cursor:pointer;border-top:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.nitem small{color:var(--muted);font-size:.75rem;display:block}
+.nitem q{display:block;font-family:var(--serif);font-style:italic;color:var(--muted);font-size:.9rem;quotes:none;margin:2px 0}
+.nitem p{margin:4px 0 0;font-size:.93rem;white-space:pre-wrap}
+.picker{position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;justify-content:center}
+.psheet{background:var(--bg);width:100%;max-width:720px;max-height:80vh;overflow:auto;border-radius:16px 16px 0 0;padding:14px 16px calc(16px + env(safe-area-inset-bottom,0px))}
+.psheet .row{justify-content:space-between;margin-bottom:10px}
+.toc-item{display:block;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);padding:11px 4px;font-size:.95rem}
+.toc-item.cur{color:var(--accent);font-weight:600}
+
+/* epub */
+#chap{font-family:var(--serif);font-size:1.1rem;line-height:1.85;margin-top:16px;overflow-wrap:anywhere}
+#chap h1,#chap h2,#chap h3,#chap h4{font-family:var(--serif);line-height:1.25;margin:1.4em 0 .5em}
+#chap p{margin:0 0 1em}
+#chap img{max-width:100%;height:auto;display:block;margin:12px auto}
+#chap blockquote{margin:1em 0;padding-left:14px;border-left:3px solid var(--line);color:var(--muted)}
+#chap table{border-collapse:collapse;display:block;overflow-x:auto}
+#chap td,#chap th{border:1px solid var(--line);padding:4px 8px}
+#chap a{color:var(--accent)}
+#chap span[data-ids]{cursor:pointer}
+.chapnav{display:flex;gap:8px;align-items:center;justify-content:space-between;margin:20px 0}
+.chapnav span{color:var(--muted);font-size:.82rem;text-align:center;flex:1}
+
+/* drawing */
+.ic{position:absolute;inset:0;z-index:35;touch-action:none;display:none;cursor:crosshair}
+body.drawing .ic{display:block}
+body.drawing .ic.penonly{touch-action:pan-y pinch-zoom}
+.inksvg{position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible}
+#inkbar{position:fixed;left:0;right:0;bottom:0;z-index:50;display:none;padding:10px 12px calc(12px + env(safe-area-inset-bottom,0px));background:var(--surface);border-top:1px solid var(--line);box-shadow:0 -6px 24px rgba(0,0,0,.12)}
+#inkbar.on{display:block}
+#inkbar .inner{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
+.ink-sw{width:28px;height:28px;border-radius:50%;border:2px solid transparent;padding:0}
+.ink-sw.sel{border-color:var(--ink)}
+.sizebtn{background:none;border:1px solid var(--line);border-radius:8px;width:38px;height:34px;display:flex;align-items:center;justify-content:center}
+.sizebtn.sel{border-color:var(--accent);background:var(--card)}
+.sizebtn i{display:block;background:var(--ink);border-radius:999px;width:20px}
+
+/* groups */
+.gbar{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 12px}
+.srchead{margin:18px 0 6px;font-family:var(--serif);font-size:1rem;font-weight:600}
+.ghost.sel{border-color:var(--accent);color:var(--accent)}
+
+/* sync status */
+.syncst{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:10px 0 0;font-size:.82rem;color:var(--muted)}
+.syncst .dot{width:8px;height:8px;border-radius:50%;background:var(--muted);flex:none}
+.syncst.ok .dot{background:#2e9a4d}
+.syncst.syncing .dot{background:var(--accent)}
+.syncst.error .dot{background:var(--danger)}
+.syncst button{padding:3px 10px;font-size:.78rem}
+
+/* toolbar */
+#bar{position:fixed;left:0;right:0;bottom:0;z-index:50;display:none;padding:10px 12px calc(12px + env(safe-area-inset-bottom,0px));background:var(--surface);border-top:1px solid var(--line);box-shadow:0 -6px 24px rgba(0,0,0,.12)}
+#bar.on{display:block}
+#bar .inner{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
+.seg{display:flex;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.seg button{flex:1;background:none;border:0;padding:9px 6px;font-size:.88rem}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button.sel{background:var(--accent);color:var(--accent-ink)}
+#bar .row{justify-content:space-between;flex-wrap:nowrap}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(24px + env(safe-area-inset-bottom,0px));max-width:90vw;background:var(--ink);color:var(--bg);padding:9px 14px;border-radius:10px;font-size:.88rem;z-index:60;opacity:0;pointer-events:none;transition:opacity .2s}
+#toast.on{opacity:1}
+</style>
+<script src="config.js"></script>
+<script defer src="lib/pdf.min.js"></script>
+<script defer src="lib/jszip.min.js"></script>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<div id="bar" role="toolbar" aria-label="Mark selected text"></div>
+<div id="inkbar" role="toolbar" aria-label="Drawing tools"></div>
+<div id="toast" role="status"></div>
+
+<script>
+(function(){
+const KEY='marginalia:v1';
+const COLORS=['yellow','green','pink','blue'];
+const WORKER='lib/pdf.worker.min.js';
+const SAMPLE_TEXT=`Why rereading feels like learning but often isn't
+
+Most students study by reading a chapter again and again. It feels productive because the words become familiar, and familiarity is easy to mistake for understanding. Recognising a sentence on the page is a much weaker skill than producing the idea from memory with the page closed.
+
+Psychologists call the stronger approach retrieval practice. Instead of looking at the material, you close it and try to write down or say what you remember. The effort is uncomfortable, and that discomfort is the point: each successful recall strengthens the memory and each failure shows you exactly where the gap is.
+
+Timing matters as much as method. Spacing your study sessions over days rather than cramming into one evening gives memories time to fade just enough that retrieving them takes real work. That slight difficulty is what makes the memory last. Cramming produces confident students on Thursday and blank ones the following week.
+
+Annotation can support all of this, but only if it is active. Highlighting an entire page turns the text yellow without turning it into knowledge. A better habit is to mark a single sentence, then write in your own words what it means, why it matters, and how it connects to something you already know.
+
+Notes are most useful when they are written for your future self. Imagine returning in three months with no memory of the chapter. A short breakdown beside the key sentence, plus a question you still have, lets you rebuild the argument in minutes instead of rereading everything.`;
+
+let S;
+let view='library', q='', panelOpen=false, openNotes=new Set(), pending=null, mode='highlight', color='yellow', adding=false, barBusy=false;
+let P=null, zoom=1, renderToken=0; const pdfCache={}; const dirty=new Set(), dlFailed=new Set();
+let libTab='library', tagFilter=null, nq='', pendingJump=null, E=null, openGroup=null, ctxGroup=null, uploadGroup=null;
+const draw={on:false,tool:'pen',size:2,color:'blue',penOnly:false,stack:[]};
+const INK={black:'#1b1f2a',blue:'#2f6fd6',red:'#d93a3a',green:'#2e9a4d'};
+const INKW={1:.0016,2:.003,3:.0065};
+const $=s=>document.querySelector(s);
+const uid=()=>Math.random().toString(36).slice(2,9);
+function seed(){return{docs:[{id:'sample0',kind:'text',title:'Sample: Why rereading feels like learning',text:SAMPLE_TEXT,words:SAMPLE_TEXT.split(/\s+/).length,added:Date.now(),noSync:true}],annos:[],cur:null,dels:[]}}
+function load(){try{const r=localStorage.getItem(KEY);if(r)return JSON.parse(r)}catch(e){}return null}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function el(tag,attrs,...kids){const e=document.createElement(tag);if(attrs)for(const k in attrs){const v=attrs[k];if(k==='class')e.className=v;else if(k==='text')e.textContent=v;else if(k.startsWith('on'))e.addEventListener(k.slice(2),v);else if(v!==false&&v!=null)e.setAttribute(k,v===true?'':v)}kids.flat().forEach(k=>{if(k!=null)e.append(k.nodeType?k:document.createTextNode(k))});return e}
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove('on'),m.length>40?4500:1800)}
+const doc=()=>S.docs.find(d=>d.id===S.cur);
+const annosOf=id=>S.annos.filter(a=>a.doc===id&&a.start!=null&&!a.del).sort((a,b)=>a.start-b.start);
+const twoCol={};
+const colOf=a=>{if(!twoCol[a.doc+':'+a.page])return 0;const r=a.rects[0];if(r.w>.65)return 0;return r.x+r.w/2>=.5?1:0};
+const pdfAnnos=id=>S.annos.filter(a=>a.doc===id&&a.page&&!a.del&&a.type!=='ink').sort((a,b)=>a.page-b.page||colOf(a)-colOf(b)||a.rects[0].y-b.rects[0].y||a.rects[0].x-b.rects[0].x);
+function detectTwoCol(tc,W){
+  const mid=W/2,gut=W*.03;let l=0,r=0,c=0;
+  tc.items.forEach(it=>{
+    if(!it.str||!it.str.trim())return;
+    const x=it.transform[4],e=x+it.width;
+    if(x<mid-gut&&e>mid+gut)c++;else if(e<=mid+gut)l++;else r++;
+  });
+  const total=l+r+c;
+  return l>=12&&r>=12&&c<=total*.02;
+}
+async function ensureCols(id){
+  if(!P)return;
+  const pages=[...new Set(S.annos.filter(a=>a.doc===id&&a.page&&!a.del).map(a=>a.page))];
+  for(const n of pages){
+    const k=id+':'+n;if(k in twoCol)continue;twoCol[k]=false;
+    try{twoCol[k]=detectTwoCol(await P.proxies[n-1].getTextContent(),P.vp1[n-1].width)}catch(e){}
+  }
+}
+const epubAnnos=id=>S.annos.filter(a=>a.doc===id&&a.ch!=null&&!a.del).sort((a,b)=>a.ch-b.ch||a.start-b.start);
+const allAnnos=d=>d.kind==='pdf'?pdfAnnos(d.id):d.kind==='epub'?epubAnnos(d.id):annosOf(d.id);
+const snippet=(d,a,n=90)=>{const raw=a.text!=null?a.text:(d&&d.text?d.text.slice(a.start,a.end):'');const t=raw.replace(/\s+/g,' ');return t.length>n?t.slice(0,n)+'…':t};
+const hasNote=a=>a.note&&a.note.trim();
+
+/* ---------- IndexedDB for PDF files ---------- */
+function idb(){return new Promise((res,rej)=>{const r=indexedDB.open('marginalia',2);r.onupgradeneeded=()=>{const db=r.result;if(!db.objectStoreNames.contains('pdfs'))db.createObjectStore('pdfs');if(!db.objectStoreNames.contains('cloud'))db.createObjectStore('cloud')};r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}
+async function idbPut(k,v){const db=await idb();return new Promise((res,rej)=>{const t=db.transaction('pdfs','readwrite');t.objectStore('pdfs').put(v,k);t.oncomplete=()=>res();t.onerror=()=>rej(t.error)})}
+async function idbGet(k){const db=await idb();return new Promise((res,rej)=>{const t=db.transaction('pdfs','readonly').objectStore('pdfs').get(k);t.onsuccess=()=>res(t.result);t.onerror=()=>rej(t.error)})}
+async function idbDel(k){try{const db=await idb();db.transaction('pdfs','readwrite').objectStore('pdfs').delete(k)}catch(e){}}
+
+/* ---------- Library ---------- */
+function renderLibrary(){
+  hideBar();releasePdf();
+  const app=$('#app');app.classList.remove('wide');app.replaceChildren();
+  app.append(el('header',{class:'top'},el('div',{class:'brand',text:'Marginalia'})));
+  app.append(el('div',{class:'seg',style:'margin-top:12px'},[['library','Library'],['groups','Groups'],['notes','All notes']].map(([k,l])=>el('button',{class:libTab===k?'sel':'',text:l,onclick:()=>{libTab=k;if(k==='groups')openGroup=null;gRename=false;renderLibrary()}}))));
+  if(libTab==='groups'){renderGroupsTab();return}
+  if(libTab==='notes'){
+    const sb=el('input',{type:'search',placeholder:'Search all your notes',value:nq,'aria-label':'Search notes'});
+    sb.addEventListener('input',()=>{nq=sb.value;renderNotesTab()});
+    app.append(el('div',{class:'lib-actions'},sb),el('div',{id:'list'}));
+    renderNotesTab();return;
+  }
+  const search=el('input',{type:'search',placeholder:'Search titles, text and your notes',value:q,'aria-label':'Search library'});
+  search.addEventListener('input',()=>{q=search.value;renderList();});
+  const file=el('input',{type:'file',accept:'.pdf,application/pdf,.epub,application/epub+zip,.txt,.md,text/plain',style:'display:none'});
+  const rfile=el('input',{type:'file',accept:'.json,application/json',style:'display:none'});
+  rfile.addEventListener('change',()=>{const f=rfile.files[0];rfile.value='';if(f)importBackup(f)});
+  file.addEventListener('change',()=>{const f=file.files[0];file.value='';if(f)importFile(f)});
+  app.append(el('div',{class:'lib-actions'},search),
+    el('div',{class:'row'},el('button',{class:'primary',onclick:()=>file.click(),text:'Upload PDF, EPUB or text'}),el('button',{class:'ghost',onclick:()=>{adding=!adding;renderLibrary()},text:'Paste text'}),file),
+    el('div',{class:'row',style:'margin-top:8px'},el('button',{class:'ghost',text:'Back up library',onclick:exportBackup}),el('button',{class:'ghost',text:'Restore backup',onclick:()=>rfile.click()}),rfile),
+    el('div',{id:'syncst',class:'syncst'}));
+  paintSync();
+  if(adding){
+    const t=el('input',{type:'text',placeholder:'Title','aria-label':'Title'});
+    const b=el('textarea',{placeholder:'Paste the article, essay or chapter here','aria-label':'Text',style:'min-height:160px'});
+    app.append(el('div',{class:'panel'},t,el('div',{style:'height:8px'}),b,el('div',{class:'row',style:'margin-top:10px'},
+      el('button',{class:'primary',text:'Save to library',onclick:()=>{if(!b.value.trim()){toast('Paste some text first');return}addDoc(t.value.trim()||'Untitled',b.value)}}),
+      el('button',{class:'ghost',text:'Cancel',onclick:()=>{adding=false;renderLibrary()}}))));
+  }
+  app.append(el('div',{id:'list',style:'margin-top:16px'}));
+  renderList();
+}
+function addDoc(title,text){
+  const t=text.replace(/\r\n/g,'\n').trim();
+  const d={id:uid(),kind:'text',title,text:t,words:t.split(/\s+/).length,index:t.slice(0,60000),groups:uploadGroup?[uploadGroup]:[],added:Date.now(),u:Date.now()};
+  S.docs.unshift(d);save();adding=false;openDoc(d.id,uploadGroup);toast('Added to library');syncSoon(500,true);
+}
+async function importFile(f){
+  const name=f.name.replace(/\.[^.]+$/,'');
+  try{
+    if(/\.pdf$/i.test(f.name)||f.type==='application/pdf'){
+      if(!window.pdfjsLib){toast('The PDF reader did not load. Check your connection and reload the page.');return}
+      toast('Opening PDF…');
+      const buf=await f.arrayBuffer();
+      const pdf=await loadPdf(buf);
+      let index='';
+      for(let p=1;p<=Math.min(pdf.numPages,60)&&index.length<80000;p++){
+        const tc=await (await pdf.getPage(p)).getTextContent();
+        index+=tc.items.map(i=>i.str).join(' ')+'\n';
+      }
+      const id=uid();pdfCache[id]=buf;
+      let stored=true;try{await idbPut(id,buf)}catch(e){stored=false}
+      S.docs.unshift({id,kind:'pdf',title:name,pages:pdf.numPages,index:index.slice(0,60000),text:'',groups:uploadGroup?[uploadGroup]:[],added:Date.now(),u:Date.now()});
+      save();try{pdf.destroy()}catch(e){}syncSoon(500,true);
+      openDoc(id,uploadGroup);
+      if(index.replace(/\s/g,'').length<40)toast('This looks like a scanned PDF. You can read it, but its text cannot be marked.');
+      else if(!stored)toast('This PDF could not be saved on this device and will disappear when you close the page.');
+    }else if(/\.epub$/i.test(f.name)||f.type==='application/epub+zip'){await importEpub(f)}
+    else addDoc(name,await f.text());
+  }catch(err){toast('Could not read that file.')}finally{uploadGroup=null}
+}
+function loadPdf(buf){
+  window.pdfjsLib.GlobalWorkerOptions.workerSrc=WORKER;
+  return window.pdfjsLib.getDocument({data:new Uint8Array(buf.slice(0))}).promise;
+}
+async function getPdfBuf(id){let b=pdfCache[id];if(!b){try{b=await idbGet(id)}catch(e){}}return b}
+function b64(buf){return new Promise(res=>{const r=new FileReader();r.onload=()=>res(String(r.result).split(',')[1]||'');r.readAsDataURL(new Blob([buf]))})}
+function unb64(s){const bin=atob(s),n=bin.length,u=new Uint8Array(n);for(let i=0;i<n;i++)u[i]=bin.charCodeAt(i);return u.buffer}
+async function exportBackup(){
+  let dl=null;try{dl=window.claude&&await window.claude.use('downloads')}catch(e){}
+  if(!dl)dl={save:async({filename,data})=>{const a=document.createElement('a');a.href=URL.createObjectURL(data);a.download=filename;document.body.append(a);a.click();setTimeout(()=>{a.remove();URL.revokeObjectURL(a.href)},3000)}};
+  toast('Preparing backup…');
+  const parts=['{"app":"marginalia","version":1,"exported":'+Date.now()+',"data":',JSON.stringify({docs:S.docs,annos:S.annos,groups:S.groups}),',"pdfs":{'];
+  let first=true,missing=0;
+  for(const d of S.docs.filter(x=>x.kind==='pdf'||x.kind==='epub')){
+    const b=await getPdfBuf(d.id);if(!b){missing++;continue}
+    parts.push((first?'':',')+JSON.stringify(d.id)+':"'+await b64(b)+'"');first=false;
+  }
+  parts.push('}}');
+  const stamp=new Date().toISOString().slice(0,10);
+  try{
+    await dl.save({filename:`marginalia-backup-${stamp}.json`,data:new Blob(parts,{type:'application/json'})});
+    toast(missing?`Backup saved. ${missing} PDF file(s) could not be included.`:'Backup saved.');
+  }catch(e){if(!e||e.code!=='declined')toast('Could not save the backup.')}
+}
+async function importBackup(f){
+  try{
+    const j=JSON.parse(await f.text());
+    if(!j||j.app!=='marginalia'||!j.data)throw new Error('bad');
+    const have=new Set(S.docs.map(d=>d.id)),haveA=new Set(S.annos.map(a=>a.id));
+    let nd=0,na=0;
+    for(const d of j.data.docs||[]){
+      if(have.has(d.id))continue;
+      if(d.kind==='pdf'||d.kind==='epub'){const s=j.pdfs&&j.pdfs[d.id];if(s){const buf=unb64(s);pdfCache[d.id]=buf;try{await idbPut(d.id,buf)}catch(e){}}}
+      S.docs.push(d);nd++;
+    }
+    for(const g of j.data.groups||[]){if(!S.groups.some(x=>x.id===g.id))S.groups.push(g)}
+    for(const a of j.data.annos||[]){if(haveA.has(a.id)||!S.docs.some(d=>d.id===a.doc))continue;S.annos.push(a);na++}
+    save();renderLibrary();syncSoon(500,true);
+    toast(nd||na?`Restored ${nd} item${nd===1?'':'s'} and ${na} mark${na===1?'':'s'}.`:'Nothing new to restore. Everything in that backup is already here.');
+  }catch(e){toast('That file is not a Marginalia backup.')}
+}
+function renderList(){
+  const list=$('#list');if(!list)return;list.replaceChildren();
+  const ql=q.trim().toLowerCase();let n=0;
+  S.docs.forEach(d=>{
+    const an=allAnnos(d);
+    const noteHits=ql?an.filter(a=>(a.note||'').toLowerCase().includes(ql)):[];
+    const body=d.kind==='pdf'||d.kind==='epub'?(d.index||''):(d.text||d.index||'');
+    const match=!ql||d.title.toLowerCase().includes(ql)||body.toLowerCase().includes(ql)||noteHits.length;
+    if(!match)return;n++;
+    const words=d.words||(d.text?d.text.split(/\s+/).length:0);
+    const size=d.kind==='pdf'?`${d.pages} pages`:d.kind==='epub'?`${d.pages} sections`:`${words} words`, notes=an.filter(hasNote).length;
+    const card=el('div',{class:'doc'},
+      el('button',{class:'open',onclick:()=>openDoc(d.id)},el('h3',{text:d.title}),el('div',{class:'meta',text:`${size}, ${an.length} marks, ${notes} notes`+(docGroupList(d).length?' · '+docGroupList(d).map(g=>g.name).join(', '):'')})),
+      noteHits.slice(0,3).map(a=>el('div',{class:'hit'},el('b',{text:'“'+snippet(d,a,60)+'”'}),el('div',{text:a.note})))
+    );
+    const del=el('button',{class:'ghost danger',style:'padding:5px 10px;font-size:.8rem',text:'Delete',onclick:()=>{
+      if(!del.dataset.arm){del.dataset.arm='1';del.textContent='Tap again to delete for good';setTimeout(()=>{if(del.isConnected){del.dataset.arm='';del.textContent='Delete'}},3500);return}
+      deleteDoc(d.id);renderLibrary();toast('Deleted');
+    }});
+    card.append(el('div',{class:'row',style:'margin-top:10px'},el('button',{class:'ghost',style:'padding:5px 10px;font-size:.8rem',text:'Groups',onclick:()=>showMembership(d,()=>renderList())}),del));list.append(card);
+  });
+  if(!n)list.append(el('div',{class:'empty',text:ql?'Nothing matches that search.':'Your library is empty. Upload a PDF or text file, or paste an article, to start.'}));
+}
+
+/* ---------- Shared reader plumbing ---------- */
+function openDoc(id,gid){ctxGroup=gid||null;S.cur=id;save();view='reader';panelOpen=false;openNotes=new Set();pending=null;window.scrollTo(0,0);renderReader()}
+function renderReader(){
+  const d=doc();if(!d){view='library';return renderLibrary()}
+  if(d.kind==='pdf')return renderPdfReader(d);
+  if(d.kind==='epub')return renderEpubReader(d);
+  releasePdf();
+  const app=$('#app');app.classList.remove('wide');app.replaceChildren();
+  app.append(el('header',{class:'top'},backBtn(),el('div',{class:'brand',text:''})));
+  app.append(el('h1',{class:'title',text:d.title}));
+  app.append(groupBar(d));
+  if(!d.text&&d.asset&&!dlFailed.has(d.id)){
+    app.append(el('div',{class:'empty',text:'Downloading from cloud storage…'}));
+    fetchAsset(d.asset).then(b=>{d.text=new TextDecoder().decode(b);save();if(S.cur===d.id)renderReader()}).catch(()=>{dlFailed.add(d.id);if(S.cur===d.id)renderReader()});
+    return;
+  }
+  if(!d.text)app.append(el('p',{class:'hint',text:'The text of this item is not available on this device. Your marks are still saved.'}));
+  app.append(el('p',{class:'hint',text:'Select any text to mark it. Tap a marked passage to open its note.'}));
+  const an=annosOf(d.id);
+  const withNotes=an.filter(hasNote);
+  const btn=el('button',{class:'notesbtn','aria-expanded':panelOpen,onclick:()=>{panelOpen=!panelOpen;renderReader()}},
+    el('span',{text:`My notes (${withNotes.length}) · ${an.length} marks`}),el('span',{class:'chev',text:'▾'}));
+  app.append(btn);
+  if(panelOpen){
+    const box=el('div',{class:'notes-list'});
+    if(!an.length)box.append(el('div',{class:'empty',style:'padding:16px 0',text:'No marks yet. Select a sentence to begin.'}));
+    an.forEach(a=>{
+      box.append(el('div',{class:'note-item',style:`border-left-color:var(--u-${a.color})`,onclick:()=>jump(a)},
+        el('q',{text:'“'+snippet(d,a)+'”'}),
+        el('p',{class:hasNote(a)?'':'none',text:hasNote(a)?a.note:'No note yet'})));
+    });
+    if(withNotes.length)box.append(el('button',{class:'ghost',style:'margin-top:6px',text:'Copy all notes',onclick:()=>copyNotes(d,withNotes)}));
+    app.append(box);
+  }
+  const text=el('div',{id:'text'});app.append(text);
+  buildText(d,an,text);
+  text.addEventListener('click',onTextClick);
+  runPending();
+}
+function copyNotes(d,list){
+  const md=`# ${d.title}\n\n`+list.map(a=>`${where(a)?where(a)+'\n':''}> ${snippet(d,a,400)}\n\n${a.note}\n`).join('\n');
+  const done=()=>toast('Notes copied');
+  try{navigator.clipboard.writeText(md).then(done,()=>toast('Copy not allowed here'))}catch(e){toast('Copy not allowed here')}
+}
+function toggleNote(id){
+  if(openNotes.has(id))openNotes.delete(id);else openNotes.add(id);
+  const a=S.annos.find(x=>x.id===id);
+  if(P&&a&&a.page){renderAnnos(a.page);renderPdfNotes()}else if(E&&a&&a.ch!=null){rerenderChapter();renderEpubNotes()}else renderReader();
+}
+
+/* ---------- Text reader ---------- */
+function buildText(d,an,box){
+  const t=d.text,L=t.length;
+  const pts=new Set([0,L]);an.forEach(a=>{pts.add(a.start);pts.add(a.end)});
+  const Pt=[...pts].sort((x,y)=>x-y);
+  for(let i=0;i<Pt.length-1;i++){
+    const a=Pt[i],b=Pt[i+1];
+    const cov=an.filter(x=>x.start<=a&&x.end>=b);
+    const sp=el('span',{'data-s':a,text:t.slice(a,b)});
+    if(cov.length){
+      sp.classList.add('has');sp.dataset.ids=cov.map(x=>x.id).join(',');
+      cov.forEach(x=>{
+        if(x.type==='highlight')sp.style.backgroundColor=`var(--c-${x.color})`;
+        if(x.type==='underline'){sp.style.textDecoration='underline';sp.style.textDecorationColor=`var(--u-${x.color})`;sp.style.textDecorationThickness='2px';sp.style.textUnderlineOffset='4px'}
+        if(x.type==='circle'){
+          const bc=`2px solid var(--u-${x.color})`;
+          sp.style.borderTop=bc;sp.style.borderBottom=bc;sp.style.padding='1px 0';
+          if(a===x.start){sp.style.borderLeft=bc;sp.style.borderTopLeftRadius='14px';sp.style.borderBottomLeftRadius='14px';sp.style.paddingLeft='4px'}
+          if(b===x.end){sp.style.borderRight=bc;sp.style.borderTopRightRadius='14px';sp.style.borderBottomRightRadius='14px';sp.style.paddingRight='4px'}
+        }
+      });
+    }
+    box.append(sp);
+    an.filter(x=>x.end===b).forEach(x=>{
+      if(hasNote(x))box.append(el('button',{class:'marker','data-m':x.id,'aria-label':'Show note',text:'note',onclick:e=>{e.stopPropagation();toggleNote(x.id)}}));
+      if(openNotes.has(x.id))box.append(noteCard(x));
+    });
+  }
+}
+function noteCard(a){
+  const ta=el('textarea',{placeholder:'Explain it in your own words, add a question, link an idea…','aria-label':'Note'});
+  ta.value=a.note||'';
+  const tg=tagsBlock(a);
+  ta.addEventListener('input',()=>{a.note=ta.value;touch(a);tg.paint()});
+  const sw=el('div',{class:'swatches'},COLORS.map(c=>el('button',{class:'sw'+(a.color===c?' sel':''),'data-c':c,'aria-label':c,onclick:()=>{a.color=c;touch(a);renderReader()}})));
+  const types=el('div',{class:'seg',style:'margin-bottom:8px'},['highlight','underline','circle'].map(tp=>el('button',{class:a.type===tp?'sel':'',text:tp[0].toUpperCase()+tp.slice(1),onclick:()=>{a.type=tp;touch(a);renderReader()}})));
+  return el('span',{class:'notecard','data-skip':'1',id:'nc-'+a.id},
+    el('span',{class:'lbl',text:'Your note (use #tags to group notes)'}),ta,tg,linksBlock(a,()=>renderReader()),types,
+    el('span',{class:'row'},sw,el('span',{class:'row'},
+      el('button',{class:'ghost danger',text:'Remove mark',onclick:()=>{a.del=true;touch(a);openNotes.delete(a.id);renderReader()}}),
+      el('button',{class:'primary',text:'Done',onclick:()=>{openNotes.delete(a.id);renderReader()}}))));
+}
+function onTextClick(e){
+  if(e.target.closest('.notecard,.marker'))return;
+  const sel=getSelection();if(sel&&!sel.isCollapsed)return;
+  const s=e.target.closest('span[data-ids]');if(!s)return;
+  const ids=s.dataset.ids.split(',');toggleNote(ids[ids.length-1]);
+}
+function jump(a){
+  openNotes.add(a.id);panelOpen=false;renderReader();
+  const s=document.querySelector(`#text span[data-s="${a.start}"]`);
+  if(s){s.scrollIntoView({behavior:'smooth',block:'center'});s.classList.add('flash');setTimeout(()=>s.classList.remove('flash'),1400)}
+}
+function pos(node,off){
+  if(node.nodeType===3){const s=node.parentElement&&node.parentElement.closest('[data-s]');return s?+s.dataset.s+off:null}
+  const c=node.childNodes[off];
+  if(c){const e=c.nodeType===1?c:c.parentElement;const s=e.closest('[data-s]')||e.querySelector&&e.querySelector('[data-s]');if(s)return +s.dataset.s}
+  const kids=node.querySelectorAll?node.querySelectorAll('[data-s]'):[];
+  if(kids.length){const l=kids[kids.length-1];return +l.dataset.s+l.textContent.length}
+  return null;
+}
+function readTextSelection(){
+  const sel=getSelection();if(!sel||sel.rangeCount===0||sel.isCollapsed)return null;
+  const r=sel.getRangeAt(0),box=$('#text');
+  if(!box||!box.contains(r.commonAncestorContainer))return null;
+  let s=pos(r.startContainer,r.startOffset),e=pos(r.endContainer,r.endOffset);
+  if(s==null||e==null)return null;
+  if(s>e)[s,e]=[e,s];
+  const t=doc().text;
+  while(s<e&&/\s/.test(t[s]))s++;
+  while(e>s&&/\s/.test(t[e-1]))e--;
+  return e>s?{start:s,end:e}:null;
+}
+
+/* ---------- PDF reader ---------- */
+function releasePdf(){
+  E=null;setDraw(false);
+  if(P){try{P.io&&P.io.disconnect()}catch(e){}try{P.pdf&&P.pdf.destroy()}catch(e){}P=null}
+  renderToken++;
+}
+async function renderPdfReader(d){
+  releasePdf();
+  const token=renderToken;
+  const app=$('#app');app.classList.add('wide');app.replaceChildren();
+  const zl=el('span',{class:'zoom',id:'zl',text:Math.round(zoom*100)+'%'});
+  app.append(el('header',{class:'top'},
+    backBtn(),
+    el('div',{class:'brand',text:''}),
+    el('button',{class:'ghost',id:'drawbtn',text:'✎ Draw',onclick:()=>setDraw(!draw.on)}),
+    el('button',{class:'ghost',text:'−','aria-label':'Zoom out',onclick:()=>setZoom(zoom-.25)}),zl,
+    el('button',{class:'ghost',text:'+','aria-label':'Zoom in',onclick:()=>setZoom(zoom+.25)})));
+  app.append(el('h1',{class:'title',text:d.title}));
+  app.append(groupBar(d));
+  app.append(el('p',{class:'hint',text:'Select text on a page to mark it. Tap a marked passage to open its note.'}));
+  app.append(el('div',{id:'notesbox'}));
+  const pages=el('div',{id:'pages'},el('div',{class:'empty',text:'Opening PDF…'}));
+  app.append(pages);
+  pages.addEventListener('click',onPdfClick);
+  if(!window.pdfjsLib){pages.replaceChildren(el('div',{class:'empty',text:'The PDF reader did not load. Check your connection and reload the page.'}));return}
+  let buf=pdfCache[d.id];
+  if(!buf){try{buf=await idbGet(d.id)}catch(e){}if(buf)pdfCache[d.id]=buf}
+  if(token!==renderToken)return;
+  if(!buf&&d.asset){
+    pages.replaceChildren(el('div',{class:'empty',text:'Downloading from cloud storage…'}));
+    try{buf=await fetchAsset(d.asset);pdfCache[d.id]=buf;try{await idbPut(d.id,buf)}catch(e){}}catch(e){}
+    if(token!==renderToken)return;
+  }
+  if(!buf){pages.replaceChildren(el('div',{class:'empty',text:d.tooBig?'This PDF was too large to sync. Upload it again on this device to read it here. Your notes are still saved.':d.asset?'Could not download this PDF from cloud storage. Check your connection and reopen it.':'This PDF is no longer stored on this device. Upload it again to keep reading. Your notes are still saved.'}));return}
+  try{
+    const pdf=await loadPdf(buf);
+    if(token!==renderToken){pdf.destroy();return}
+    const proxies=[];
+    for(let i=1;i<=pdf.numPages;i++)proxies.push(await pdf.getPage(i));
+    if(token!==renderToken){pdf.destroy();return}
+    P={doc:d,pdf,proxies,vp1:proxies.map(p=>p.getViewport({scale:1})),pages:[],gen:0,io:null};
+    renderPdfNotes();
+    buildPages();
+    runPending();
+  }catch(err){pages.replaceChildren(el('div',{class:'empty',text:'This PDF could not be opened.'}))}
+}
+function setZoom(z){
+  z=Math.max(.75,Math.min(2.5,Math.round(z*4)/4));
+  if(z===zoom||!P)return;
+  let keep=1;P.pages.forEach(pg=>{if(pg.el.getBoundingClientRect().bottom>90&&keep===1&&pg.n>=1){keep=pg.n;}});
+  const first=P.pages.find(pg=>pg.el.getBoundingClientRect().bottom>90);if(first)keep=first.n;
+  zoom=z;$('#zl').textContent=Math.round(zoom*100)+'%';
+  buildPages();
+  const pg=P.pages[keep-1];if(pg)pg.el.scrollIntoView({block:'start'});
+}
+function buildPages(){
+  if(P.io)P.io.disconnect();
+  P.gen++;
+  const box=$('#pages');box.replaceChildren();
+  const baseW=Math.max(200,box.clientWidth||320);
+  P.pages=P.proxies.map((proxy,i)=>{
+    const vp1=P.vp1[i],w=Math.round(baseW*zoom),h=Math.round(w*vp1.height/vp1.width);
+    const pe=el('div',{class:'page','data-n':i+1,style:`width:${w}px;height:${h}px`},
+      el('div',{class:'ph',text:'Page '+(i+1)}),el('div',{class:'al'}),el('div',{class:'nl'}),el('div',{class:'ic'}));
+    box.append(pe);
+    return{n:i+1,el:pe,proxy,vp1,w,h,rendered:false,rendering:false,want:false,task:null};
+  });
+  P.io=new IntersectionObserver(es=>es.forEach(e=>{
+    const n=+e.target.dataset.n;
+    if(e.isIntersecting)renderPage(n);else unrenderPage(n);
+  }),{rootMargin:'900px 0px'});
+  P.pages.forEach(pg=>{P.io.observe(pg.el);renderAnnos(pg.n);bindInk(pg)});
+}
+async function renderPage(n){
+  if(!P)return;
+  const pg=P.pages[n-1],gen=P.gen;
+  if(!pg||pg.rendered||pg.rendering)return;
+  pg.rendering=true;pg.want=true;
+  try{
+    const vp=pg.proxy.getViewport({scale:pg.w/pg.vp1.width});
+    const dpr=Math.min(window.devicePixelRatio||1,2);
+    const cv=document.createElement('canvas');
+    cv.width=Math.floor(vp.width*dpr);cv.height=Math.floor(vp.height*dpr);
+    cv.style.width=vp.width+'px';cv.style.height=vp.height+'px';
+    pg.task=pg.proxy.render({canvasContext:cv.getContext('2d'),viewport:vp,transform:dpr!==1?[dpr,0,0,dpr,0,0]:undefined});
+    await pg.task.promise;
+    if(!P||gen!==P.gen||!pg.want)return;
+    const ph=pg.el.querySelector('.ph');if(ph)ph.remove();
+    pg.el.prepend(cv);
+    const tc=await pg.proxy.getTextContent();
+    if(!P||gen!==P.gen||!pg.want)return;
+    const tl=el('div',{class:'textLayer'});
+    tl.style.width=vp.width+'px';tl.style.height=vp.height+'px';tl.style.setProperty('--scale-factor',vp.scale);
+    pg.el.append(tl);
+    await window.pdfjsLib.renderTextLayer({textContentSource:tc,container:tl,viewport:vp,textDivs:[]}).promise;
+    pg.rendered=true;
+  }catch(e){if(!(e&&e.name==='RenderingCancelledException'))console.warn(e)}
+  finally{pg.rendering=false}
+}
+function unrenderPage(n){
+  if(!P)return;const pg=P.pages[n-1];if(!pg)return;
+  pg.want=false;
+  if(pg.task){try{pg.task.cancel()}catch(e){}}
+  const c=pg.el.querySelector('canvas');if(c){c.width=0;c.height=0;c.remove()}
+  const t=pg.el.querySelector('.textLayer');if(t)t.remove();
+  pg.rendered=false;
+}
+const pct=v=>(v*100).toFixed(3)+'%';
+function renderAnnos(n){
+  if(!P)return;
+  const pg=P.pages[n-1];if(!pg)return;
+  const al=pg.el.querySelector('.al'),nl=pg.el.querySelector('.nl');
+  al.replaceChildren();nl.replaceChildren();
+  S.annos.filter(a=>a.doc===P.doc.id&&a.page===n&&!a.del).forEach(a=>{
+    if(a.type==='ink'){inkInto(al,a,pg);return}
+    const place=(cls,r,extra)=>{const d=el('div',{class:cls,'data-a':a.id});d.style.cssText=`left:${pct(r.x)};top:${pct(r.y)};width:${pct(r.w)};height:${pct(r.h)};`+(extra||'');al.append(d)};
+    if(a.type==='circle'){
+      const x0=Math.min(...a.rects.map(r=>r.x)),y0=Math.min(...a.rects.map(r=>r.y)),x1=Math.max(...a.rects.map(r=>r.x+r.w)),y1=Math.max(...a.rects.map(r=>r.y+r.h));
+      place('ci',{x:x0-.006,y:y0-.003,w:x1-x0+.012,h:y1-y0+.006},`border-color:var(--u-${a.color})`);
+    }else a.rects.forEach(r=>{
+      if(a.type==='underline')place('ul',r,`border-color:var(--u-${a.color})`);
+      else place('hl',r,`background:var(--p-${a.color})`);
+    });
+    const last=a.rects[a.rects.length-1];
+    if(hasNote(a)){
+      const m=el('button',{class:'marker','aria-label':'Show note',text:'note',onclick:e=>{e.stopPropagation();toggleNote(a.id)}});
+      m.style.left=`calc(${pct(last.x+last.w)} + 2px)`;m.style.top=pct(last.y);nl.append(m);
+    }
+    if(openNotes.has(a.id))nl.append(pdfCard(a,last));
+  });
+}
+function pdfCard(a,last){
+  const ta=el('textarea',{placeholder:'Explain it in your own words, add a question, link an idea…','aria-label':'Note'});
+  ta.value=a.note||'';
+  const tg=tagsBlock(a);
+  ta.addEventListener('input',()=>{a.note=ta.value;touch(a);tg.paint()});
+  const sw=el('div',{class:'swatches'},COLORS.map(c=>el('button',{class:'sw'+(a.color===c?' sel':''),'data-c':c,'aria-label':c,onclick:()=>{a.color=c;touch(a);renderAnnos(a.page)}})));
+  const types=el('div',{class:'seg',style:'margin-bottom:8px'},['highlight','underline','circle'].map(tp=>el('button',{class:a.type===tp?'sel':'',text:tp[0].toUpperCase()+tp.slice(1),onclick:()=>{a.type=tp;touch(a);renderAnnos(a.page)}})));
+  const card=el('div',{class:'pcard'},
+    el('q',{text:'“'+snippet(null,a,70)+'”'}),el('span',{class:'lbl',text:'Your note (use #tags to group notes)'}),ta,tg,linksBlock(a,()=>renderAnnos(a.page)),types,
+    el('div',{class:'row'},sw,el('div',{class:'row'},
+      el('button',{class:'ghost danger',text:'Remove',onclick:()=>{a.del=true;touch(a);openNotes.delete(a.id);renderAnnos(a.page);renderPdfNotes()}}),
+      el('button',{class:'primary',text:'Done',onclick:()=>{openNotes.delete(a.id);renderAnnos(a.page);renderPdfNotes()}}))));
+  const left=`max(8px, min(${pct(last.x)}, calc(100% - 328px)))`;
+  card.style.left=left;
+  if(last.y+last.h<.6)card.style.top=`calc(${pct(last.y+last.h)} + 8px)`;
+  else card.style.bottom=`calc(${pct(1-a.rects[0].y)} + 8px)`;
+  return card;
+}
+async function renderPdfNotes(){
+  if(!P)return;
+  await ensureCols(P.doc.id);
+  const box=$('#notesbox');if(!box||!P)return;box.replaceChildren();
+  const d=P.doc,an=pdfAnnos(d.id),withNotes=an.filter(hasNote);
+  box.append(el('button',{class:'notesbtn','aria-expanded':panelOpen,onclick:()=>{panelOpen=!panelOpen;renderPdfNotes()}},
+    el('span',{text:`My notes (${withNotes.length}) · ${an.length} marks`}),el('span',{class:'chev',text:'▾'})));
+  if(panelOpen){
+    const list=el('div',{class:'notes-list'});
+    if(!an.length)list.append(el('div',{class:'empty',style:'padding:16px 0',text:'No marks yet. Select text on a page to begin.'}));
+    an.forEach(a=>list.append(el('div',{class:'note-item',style:`border-left-color:var(--u-${a.color})`,onclick:()=>jumpPdf(a)},
+      el('small',{text:'Page '+a.page}),el('q',{text:'“'+snippet(d,a)+'”'}),
+      el('p',{class:hasNote(a)?'':'none',text:hasNote(a)?a.note:'No note yet'}))));
+    if(withNotes.length)list.append(el('button',{class:'ghost',style:'margin-top:6px',text:'Copy all notes',onclick:()=>copyNotes(d,withNotes)}));
+    box.append(list);
+  }
+}
+function jumpPdf(a){
+  openNotes.add(a.id);panelOpen=false;renderPdfNotes();renderAnnos(a.page);
+  const pg=P.pages[a.page-1];if(!pg)return;
+  const top=pg.el.getBoundingClientRect().top+window.scrollY+a.rects[0].y*pg.h-160;
+  window.scrollTo({top:Math.max(0,top),behavior:'smooth'});
+  const f=pg.el.querySelector(`[data-a="${a.id}"]`);
+  if(f){f.classList.add('flash');setTimeout(()=>f.classList.remove('flash'),1600)}
+}
+function onPdfClick(e){
+  if(e.target.closest('.pcard,.marker'))return;
+  const sel=getSelection();if(sel&&!sel.isCollapsed)return;
+  const pe=e.target.closest('.page');if(!pe)return;
+  const n=+pe.dataset.n,r=pe.getBoundingClientRect();
+  const x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height,t=.004;
+  const hits=S.annos.filter(a=>a.doc===S.cur&&a.page===n&&!a.del&&a.type!=='ink'&&a.rects.some(b=>x>=b.x-t&&x<=b.x+b.w+t&&y>=b.y-t&&y<=b.y+b.h+t));
+  if(hits.length)toggleNote(hits[hits.length-1].id);
+}
+function mergeLines(rs){
+  rs.sort((a,b)=>a.y-b.y||a.x-b.x);
+  const lines=[];
+  rs.forEach(r=>{
+    const cy=r.y+r.h/2;
+    const ln=lines.find(l=>Math.abs(cy-(l.y+l.h/2))<Math.max(l.h,r.h)*.5&&r.x<=l.x+l.w+Math.max(l.h,r.h)*1.5&&r.x+r.w>=l.x-Math.max(l.h,r.h)*1.5);
+    if(ln){const x0=Math.min(ln.x,r.x),x1=Math.max(ln.x+ln.w,r.x+r.w),y0=Math.min(ln.y,r.y),y1=Math.max(ln.y+ln.h,r.y+r.h);ln.x=x0;ln.w=x1-x0;ln.y=y0;ln.h=y1-y0}
+    else lines.push({x:r.x,y:r.y,w:r.w,h:r.h});
+  });
+  return lines;
+}
+function readPdfSelection(){
+  const sel=getSelection();if(!P||!sel||!sel.rangeCount||sel.isCollapsed)return null;
+  const range=sel.getRangeAt(0),box=$('#pages');
+  if(!box||!box.contains(range.commonAncestorContainer))return null;
+  const text=sel.toString().replace(/\s+/g,' ').trim();if(!text)return null;
+  const crs=[...range.getClientRects()].filter(r=>r.width>1&&r.height>2);
+  const groups=new Map();
+  const bounds=P.pages.map(pg=>({pg,r:pg.el.getBoundingClientRect()}));
+  crs.forEach(r=>{
+    const cx=r.left+r.width/2,cy=r.top+r.height/2;
+    const b=bounds.find(b=>cx>=b.r.left&&cx<=b.r.right&&cy>=b.r.top&&cy<=b.r.bottom);
+    if(!b)return;
+    const nr={x:(r.left-b.r.left)/b.r.width,y:(r.top-b.r.top)/b.r.height,w:r.width/b.r.width,h:r.height/b.r.height};
+    if(nr.h>.08||nr.w>.97)return;
+    if(!groups.has(b.pg.n))groups.set(b.pg.n,[]);groups.get(b.pg.n).push(nr);
+  });
+  const out=[...groups.entries()].sort((a,b)=>a[0]-b[0]).map(([n,rs])=>({n,rects:mergeLines(rs)})).filter(g=>g.rects.length);
+  return out.length?{text,groups:out}:null;
+}
+function applyPdf(withNote){
+  let firstId=null;const touched=[];
+  pending.groups.forEach((g,i)=>{
+    const a={id:uid(),doc:S.cur,page:g.n,rects:g.rects,type:mode,color,note:'',u:Date.now(),text:i===0?pending.text:`(continued from page ${pending.groups[0].n})`};
+    S.annos.push(a);touched.push(g.n);if(i===0)firstId=a.id;
+  });
+  if(withNote&&firstId)openNotes.add(firstId);
+  save();markDirty(S.cur);pending=null;barBusy=false;
+  const sel=getSelection();if(sel)sel.removeAllRanges();
+  hideBar();touched.forEach(renderAnnos);renderPdfNotes();
+  if(withNote){setTimeout(()=>{const t=document.querySelector('.pcard textarea');if(t){t.scrollIntoView({block:'center',behavior:'smooth'});t.focus({preventScroll:true})}},50)}
+}
+
+/* ---------- Tags, links and the All notes tab ---------- */
+const TAGRE=/#[\p{L}\p{N}_-]+/gu;
+const tagsOf=a=>[...new Set(((a.note||'').match(TAGRE)||[]).map(t=>t.toLowerCase()))];
+const liveAnnos=()=>S.annos.filter(a=>!a.del&&a.type!=='ink');
+const annoById=id=>S.annos.find(a=>a.id===id&&!a.del);
+const docOf=id=>S.docs.find(d=>d.id===id);
+function where(a){
+  const d=docOf(a.doc);if(!d)return '';
+  if(a.page)return 'p. '+a.page;
+  if(a.ch!=null)return (d.toc&&d.toc[a.ch])||('Section '+(a.ch+1));
+  return '';
+}
+function tagsBlock(a){
+  const box=el('div',{class:'tags'});
+  box.paint=()=>{box.replaceChildren();tagsOf(a).forEach(t=>box.append(el('button',{class:'tagchip',text:t,onclick:()=>showTag(t)})))};
+  box.paint();return box;
+}
+function showTag(t){libTab='notes';tagFilter=t;nq='';view='library';hideBar();renderLibrary()}
+const chipText=t=>{const d=docOf(t.doc);const s=(hasNote(t)?t.note:snippet(d,t,40)).replace(/\s+/g,' ');return (d?d.title.slice(0,16)+': ':'')+(s.length>32?s.slice(0,32)+'…':s)};
+function linksBlock(a,rerender){
+  const box=el('div',{class:'links'});
+  const out=(a.links||[]).map(annoById).filter(Boolean);
+  const back=liveAnnos().filter(x=>x.id!==a.id&&(x.links||[]).includes(a.id));
+  out.forEach(t=>box.append(el('span',{class:'linkchip'},
+    el('button',{class:'lk',text:'↗ '+chipText(t),onclick:()=>gotoAnno(t)}),
+    el('button',{class:'x','aria-label':'Remove link',text:'×',onclick:()=>{a.links=(a.links||[]).filter(i=>i!==t.id);touch(a);rerender()}}))));
+  back.forEach(t=>box.append(el('span',{class:'linkchip back'},el('button',{class:'lk',text:'↙ '+chipText(t),onclick:()=>gotoAnno(t)}))));
+  box.append(el('button',{class:'ghost small',text:'Link a note',onclick:()=>pickNote(a,t=>{a.links=[...new Set([...(a.links||[]),t.id])];touch(a);rerender()})}));
+  return box;
+}
+function noteItem(x,onclick){
+  const d=docOf(x.doc),w=where(x);
+  return el('div',{class:'nitem',style:`border-left-color:var(--u-${x.color})`,onclick},
+    el('small',{text:(d?d.title:'')+(w?' · '+w:'')}),
+    el('q',{text:'“'+snippet(d,x,120)+'”'}),
+    el('p',{text:x.note}),
+    (x.links&&x.links.length)?el('small',{text:'↗ '+x.links.length+' linked'}):null);
+}
+function matchNote(x,ql){
+  if(!ql)return true;const d=docOf(x.doc);
+  return x.note.toLowerCase().includes(ql)||snippet(d,x,400).toLowerCase().includes(ql)||(d?d.title.toLowerCase().includes(ql):false);
+}
+function pickNote(from,cb){
+  const ov=el('div',{class:'picker',role:'dialog','aria-label':'Link a note'});
+  const search=el('input',{type:'search',placeholder:'Search your notes','aria-label':'Search notes'});
+  const list=el('div');
+  const paint=()=>{
+    list.replaceChildren();const ql=search.value.trim().toLowerCase();
+    const items=liveAnnos().filter(x=>x.id!==from.id&&hasNote(x)&&matchNote(x,ql)).sort((x,y)=>(y.u||0)-(x.u||0)).slice(0,60);
+    if(!items.length)list.append(el('div',{class:'empty',text:'No notes to link yet. Notes that have text show up here.'}));
+    items.forEach(x=>list.append(noteItem(x,()=>{ov.remove();cb(x)})));
+  };
+  search.addEventListener('input',paint);
+  ov.append(el('div',{class:'psheet'},el('div',{class:'row'},el('strong',{text:'Link a note'}),el('button',{class:'ghost',text:'Cancel',onclick:()=>ov.remove()})),search,list));
+  ov.addEventListener('click',e=>{if(e.target===ov)ov.remove()});
+  document.body.append(ov);paint();search.focus();
+}
+function renderNotesTab(){
+  const box=$('#list');if(!box)return;box.replaceChildren();
+  const all=liveAnnos().filter(hasNote);
+  const counts={};all.forEach(a=>tagsOf(a).forEach(t=>counts[t]=(counts[t]||0)+1));
+  if(tagFilter&&!counts[tagFilter])tagFilter=null;
+  box.append(el('div',{class:'tagrow'},
+    el('button',{class:'tagchip'+(!tagFilter?' on':''),text:`All (${all.length})`,onclick:()=>{tagFilter=null;renderNotesTab()}}),
+    Object.keys(counts).sort().map(t=>el('button',{class:'tagchip'+(tagFilter===t?' on':''),text:`${t} (${counts[t]})`,onclick:()=>{tagFilter=t;renderNotesTab()}}))));
+  const ql=nq.trim().toLowerCase();
+  const items=all.filter(a=>(!tagFilter||tagsOf(a).includes(tagFilter))&&matchNote(a,ql)).sort((x,y)=>(y.u||0)-(x.u||0));
+  if(!items.length)box.append(el('div',{class:'empty',text:all.length?'No notes match.':'Notes you write on highlights show up here, from every article and book. Add #tags to group them.'}));
+  items.forEach(x=>box.append(noteItem(x,()=>gotoAnno(x))));
+}
+function gotoAnno(a,gid){
+  const d=docOf(a.doc);if(!d)return;
+  pendingJump=a.id;
+  if(view==='reader'&&S.cur===d.id){runPending();return}
+  openDoc(d.id,gid||(ctxGroup&&(d.groups||[]).includes(ctxGroup)?ctxGroup:null));
+}
+function runPending(){
+  if(!pendingJump)return;
+  const a=annoById(pendingJump);pendingJump=null;if(!a)return;
+  if(a.page&&P)jumpPdf(a);
+  else if(a.ch!=null&&E)jumpEpub(a);
+  else if(!P&&!E&&a.start!=null&&a.ch==null&&view==='reader')jump(a);
+}
+
+/* ---------- Freehand drawing on PDF pages ---------- */
+const SVGNS='http://www.w3.org/2000/svg';
+function setDraw(on){
+  if(on&&!P)return;
+  draw.on=!!on;
+  document.body.classList.toggle('drawing',draw.on);
+  const b=$('#drawbtn');if(b){b.classList.toggle('sel',draw.on);b.textContent=draw.on?'✎ Drawing':'✎ Draw'}
+  const ib=$('#inkbar');
+  if(draw.on){hideBar();pending=null;paintInkBar()}else{if(ib)ib.classList.remove('on');draw.stack=[]}
+  document.querySelectorAll('.ic').forEach(i=>i.classList.toggle('penonly',draw.penOnly));
+}
+function paintInkBar(){
+  const ib=$('#inkbar');if(!ib)return;ib.replaceChildren();
+  const tool=el('div',{class:'seg'},[['pen','Pen'],['eraser','Eraser']].map(([k,l])=>el('button',{class:draw.tool===k?'sel':'',text:l,onclick:()=>{draw.tool=k;paintInkBar()}})));
+  const cols=el('div',{class:'swatches'},Object.keys(INK).map(c=>{const b=el('button',{class:'ink-sw'+(draw.color===c&&draw.tool==='pen'?' sel':''),'aria-label':'Ink '+c,onclick:()=>{draw.color=c;draw.tool='pen';paintInkBar()}});b.style.background=INK[c];return b}));
+  const sizes=el('div',{class:'row',style:'gap:6px;flex-wrap:nowrap'},[1,2,3].map(n=>{const b=el('button',{class:'sizebtn'+(draw.size===n?' sel':''),'aria-label':'Pen size '+n,onclick:()=>{draw.size=n;paintInkBar()}});const i=el('i');i.style.height=(1+n*1.5)+'px';b.append(i);return b}));
+  ib.append(el('div',{class:'inner'},tool,
+    el('div',{class:'row',style:'justify-content:space-between;flex-wrap:nowrap'},cols,sizes),
+    el('div',{class:'row',style:'justify-content:space-between'},
+      el('button',{class:'ghost',text:'Undo',onclick:undoInk}),
+      el('button',{class:'ghost',text:'Pen only: '+(draw.penOnly?'on':'off'),onclick:()=>{draw.penOnly=!draw.penOnly;paintInkBar();document.querySelectorAll('.ic').forEach(i=>i.classList.toggle('penonly',draw.penOnly))}}),
+      el('button',{class:'primary',text:'Done',onclick:()=>setDraw(false)}))));
+  ib.classList.add('on');
+}
+function inkSvg(al){
+  let s=al.querySelector('svg.inksvg');
+  if(!s){s=document.createElementNS(SVGNS,'svg');s.setAttribute('class','inksvg');s.setAttribute('viewBox','0 0 1 1');s.setAttribute('preserveAspectRatio','none');al.append(s)}
+  return s;
+}
+function styleInk(path,color,size,pg){
+  path.setAttribute('fill','none');path.setAttribute('stroke',INK[color]||INK.blue);
+  path.setAttribute('stroke-width',String(Math.max(1,(INKW[size]||INKW[2])*pg.w)));
+  path.setAttribute('stroke-linecap','round');path.setAttribute('stroke-linejoin','round');
+  path.setAttribute('vector-effect','non-scaling-stroke');
+}
+function inkPath(p){
+  if(p.length===1)return `M${p[0][0]} ${p[0][1]}L${p[0][0]+0.0001} ${p[0][1]}`;
+  let d=`M${p[0][0]} ${p[0][1]}`;
+  for(let i=1;i<p.length-1;i++){const mx=(p[i][0]+p[i+1][0])/2,my=(p[i][1]+p[i+1][1])/2;d+=`Q${p[i][0]} ${p[i][1]} ${mx} ${my}`}
+  const l=p[p.length-1];return d+`L${l[0]} ${l[1]}`;
+}
+function inkInto(al,a,pg){
+  const svg=inkSvg(al),pts=[];
+  for(let i=0;i+1<a.pts.length;i+=2)pts.push([a.pts[i],a.pts[i+1]]);
+  if(!pts.length)return;
+  const path=document.createElementNS(SVGNS,'path');styleInk(path,a.color,a.w||2,pg);
+  path.setAttribute('d',inkPath(pts));path.setAttribute('data-a',a.id);svg.append(path);
+}
+function simplify(p,eps){
+  if(p.length<3)return p;
+  const keep=new Uint8Array(p.length);keep[0]=keep[p.length-1]=1;
+  const st=[[0,p.length-1]];
+  while(st.length){
+    const [a,b]=st.pop();let md=0,mi=-1;
+    const ax=p[a][0],ay=p[a][1],dx=p[b][0]-ax,dy=p[b][1]-ay,L=Math.hypot(dx,dy);
+    for(let i=a+1;i<b;i++){
+      const d=L<1e-6?Math.hypot(p[i][0]-ax,p[i][1]-ay):Math.abs((p[i][0]-ax)*dy-(p[i][1]-ay)*dx)/L;
+      if(d>md){md=d;mi=i}
+    }
+    if(md>eps&&mi>0){keep[mi]=1;st.push([a,mi],[mi,b])}
+  }
+  return p.filter((_,i)=>keep[i]);
+}
+function finishStroke(pg,pts){
+  const sp=simplify(pts,0.0009),flat=[];
+  sp.forEach(p=>flat.push(Math.round(p[0]*10000)/10000,Math.round(p[1]*10000)/10000));
+  const xs=sp.map(p=>p[0]),ys=sp.map(p=>p[1]);
+  const x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys),y1=Math.max(...ys);
+  const a={id:uid(),doc:S.cur,page:pg.n,type:'ink',color:draw.color,w:draw.size,pts:flat,rects:[{x:x0,y:y0,w:x1-x0,h:y1-y0}],note:'',u:Date.now()};
+  S.annos.push(a);draw.stack.push(a.id);save();markDirty(S.cur);renderAnnos(pg.n);
+}
+function segDist(px,py,ax,ay,bx,by){
+  const dx=bx-ax,dy=by-ay,L=dx*dx+dy*dy;let t=L?((px-ax)*dx+(py-ay)*dy)/L:0;t=Math.max(0,Math.min(1,t));
+  return Math.hypot(px-(ax+t*dx),py-(ay+t*dy));
+}
+function eraseAt(pg,p){
+  const R=16;let hit=false;
+  S.annos.forEach(a=>{
+    if(a.doc!==S.cur||a.page!==pg.n||a.type!=='ink'||a.del)return;
+    let near=false;
+    for(let i=0;i+1<a.pts.length&&!near;i+=2){
+      const ax=a.pts[i]*pg.w,ay=a.pts[i+1]*pg.h;let bx=ax,by=ay;
+      if(i+3<a.pts.length){bx=a.pts[i+2]*pg.w;by=a.pts[i+3]*pg.h}
+      near=segDist(p[0]*pg.w,p[1]*pg.h,ax,ay,bx,by)<=R;
+    }
+    if(near){a.del=true;a.u=Date.now();hit=true}
+  });
+  if(hit){save();markDirty(S.cur);renderAnnos(pg.n)}
+}
+function undoInk(){
+  while(draw.stack.length){
+    const id=draw.stack.pop(),a=S.annos.find(x=>x.id===id);
+    if(a&&!a.del){a.del=true;a.u=Date.now();save();markDirty(a.doc);renderAnnos(a.page);return}
+  }
+}
+function bindInk(pg){
+  const ic=pg.el.querySelector('.ic');if(!ic)return;
+  let cur=null;
+  const pt=e=>{const r=pg.el.getBoundingClientRect();return[Math.min(1,Math.max(0,(e.clientX-r.left)/r.width)),Math.min(1,Math.max(0,(e.clientY-r.top)/r.height))]};
+  ic.addEventListener('pointerdown',e=>{
+    if(!draw.on)return;
+    if(draw.penOnly&&e.pointerType==='touch')return;
+    e.preventDefault();try{ic.setPointerCapture(e.pointerId)}catch(_){}
+    if(draw.tool==='eraser'){cur={erase:true};eraseAt(pg,pt(e));return}
+    const path=document.createElementNS(SVGNS,'path');styleInk(path,draw.color,draw.size,pg);
+    inkSvg(pg.el.querySelector('.al')).append(path);
+    cur={pts:[pt(e)],path};path.setAttribute('d',inkPath(cur.pts));
+  });
+  ic.addEventListener('pointermove',e=>{
+    if(!cur)return;e.preventDefault();
+    if(cur.erase){eraseAt(pg,pt(e));return}
+    const evs=e.getCoalescedEvents?e.getCoalescedEvents():[];
+    (evs.length?evs:[e]).forEach(ev=>cur.pts.push(pt(ev)));
+    cur.path.setAttribute('d',inkPath(cur.pts));
+  });
+  const end=()=>{
+    if(!cur)return;const c=cur;cur=null;
+    if(c.erase)return;
+    c.path.remove();finishStroke(pg,c.pts);
+  };
+  ic.addEventListener('pointerup',end);ic.addEventListener('pointercancel',end);
+}
+
+/* ---------- EPUB books ---------- */
+const MIME={png:'image/png',jpg:'image/jpeg',jpeg:'image/jpeg',gif:'image/gif',webp:'image/webp'};
+const normPath=p=>{const out=[];p.split('/').forEach(s=>{if(s==='..')out.pop();else if(s&&s!=='.')out.push(s)});return out.join('/')};
+const dirOf=p=>p.includes('/')?p.slice(0,p.lastIndexOf('/')+1):'';
+const pathOf=h=>{try{return normPath(decodeURIComponent(h))}catch(e){return normPath(h)}};
+const BAD='script,style,link,meta,iframe,object,embed,form,input,button,select,textarea,audio,video,source,base,noscript,canvas,template,svg,math';
+const KEEP_ATTR=['href','src','alt','title','colspan','rowspan','id'];
+const renderLink=h=>/^(#ch\/\d+\/|https?:|mailto:)/i.test(h)?h:null;
+function sanitizeTree(root,linkFn){
+  root.querySelectorAll(BAD).forEach(n=>n.remove());
+  root.querySelectorAll('*').forEach(n=>{
+    [...n.attributes].forEach(at=>{if(!KEEP_ATTR.includes(at.name.toLowerCase()))n.removeAttribute(at.name)});
+    const tag=n.tagName.toLowerCase();
+    if(tag==='a'){
+      const h=n.getAttribute('href');if(h==null)return;
+      const nh=linkFn(h);
+      if(nh==null)n.removeAttribute('href');
+      else{n.setAttribute('href',nh);if(/^https?:/i.test(nh)){n.setAttribute('target','_blank');n.setAttribute('rel','noopener noreferrer')}}
+    }else if(tag==='img'){
+      if(!/^data:image\/(png|jpe?g|gif|webp);base64,/i.test(n.getAttribute('src')||''))n.remove();
+    }else{n.removeAttribute('href');n.removeAttribute('src')}
+  });
+}
+const mkLink=(ci,chapPath,idxOf)=>h=>{
+  if(/^(https?:|mailto:)/i.test(h))return h;
+  if(h.startsWith('#'))return '#ch/'+ci+'/'+encodeURIComponent(h.slice(1));
+  if(/^[a-z][a-z0-9+.-]*:/i.test(h))return null;
+  const parts=h.split('#');const i=idxOf[pathOf(dirOf(chapPath)+parts[0])];
+  return i==null?null:'#ch/'+i+'/'+encodeURIComponent(parts[1]||'');
+};
+async function inlineImages(body,zip,chapPath){
+  for(const svg of [...body.querySelectorAll('svg')]){
+    const im=svg.querySelector('image');
+    if(im){const img=document.createElement('img');img.setAttribute('src',im.getAttribute('xlink:href')||im.getAttribute('href')||'');svg.replaceWith(img)}
+    else svg.remove();
+  }
+  for(const img of [...body.querySelectorAll('img')]){
+    const src=img.getAttribute('src')||'';
+    if(!src||/^(https?:|data:)/i.test(src)){if(!/^data:image\//i.test(src))img.remove();continue}
+    const path=pathOf(dirOf(chapPath)+src.split('#')[0]);
+    const f=zip.file(path);if(!f){img.remove();continue}
+    const mime=MIME[path.split('.').pop().toLowerCase()];
+    if(!mime){img.remove();continue}
+    const b=await f.async('base64');
+    if(b.length>4e6){img.remove();continue}
+    img.setAttribute('src','data:'+mime+';base64,'+b);
+  }
+}
+async function parseEpub(zip){
+  const rd=async p=>{const f=zip.file(p)||zip.file(pathOf(p));return f?await f.async('string'):null};
+  const cont=await rd('META-INF/container.xml');if(!cont)throw new Error('no container');
+  const rf=new DOMParser().parseFromString(cont,'application/xml').querySelector('rootfile');
+  const opfPath=rf&&rf.getAttribute('full-path');if(!opfPath)throw new Error('no opf');
+  const opf=new DOMParser().parseFromString(await rd(opfPath),'application/xml');
+  const base=dirOf(opfPath);
+  const man={};opf.querySelectorAll('manifest > item').forEach(i=>man[i.getAttribute('id')]={href:i.getAttribute('href'),type:i.getAttribute('media-type')||'',props:i.getAttribute('properties')||''});
+  const spine=[...opf.querySelectorAll('spine > itemref')].map(r=>man[r.getAttribute('idref')]).filter(m=>m&&/html/i.test(m.type));
+  const tn=opf.getElementsByTagNameNS('*','title')[0],an=opf.getElementsByTagNameNS('*','creator')[0];
+  const tocMap={};
+  try{
+    const nav=Object.values(man).find(m=>/\bnav\b/.test(m.props));
+    if(nav){
+      const np=pathOf(base+nav.href),h=await rd(np);
+      if(h){const nd=new DOMParser().parseFromString(h,'text/html');const nv=nd.querySelector('nav[epub\\:type="toc"]')||nd.querySelector('nav');
+        if(nv)nv.querySelectorAll('a[href]').forEach(a=>{const k=pathOf(dirOf(np)+a.getAttribute('href').split('#')[0]);if(!tocMap[k])tocMap[k]=a.textContent.trim()})}
+    }else{
+      const ncx=Object.values(man).find(m=>/ncx/.test(m.type));
+      if(ncx){const np=pathOf(base+ncx.href),x=await rd(np);
+        if(x)new DOMParser().parseFromString(x,'application/xml').querySelectorAll('navPoint').forEach(n=>{const t=n.querySelector('navLabel > text'),c=n.querySelector('content');if(t&&c){const k=pathOf(dirOf(np)+c.getAttribute('src').split('#')[0]);if(!tocMap[k])tocMap[k]=t.textContent.trim()}})}
+    }
+  }catch(e){}
+  const raw=[];
+  for(const m of spine){
+    const path=pathOf(base+m.href),html=await rd(path);if(!html)continue;
+    const body=new DOMParser().parseFromString(html,'text/html').body;if(!body)continue;
+    await inlineImages(body,zip,path);
+    const text=body.textContent.replace(/\s+/g,' ').trim();
+    if(!text&&!body.querySelector('img'))continue;
+    raw.push({path,body,text});
+  }
+  const idxOf={};raw.forEach((c,i)=>idxOf[c.path]=i);
+  const index=raw.map(c=>c.text).join('\n').slice(0,60000);
+  const chapters=raw.map((c,i)=>{
+    sanitizeTree(c.body,mkLink(i,c.path,idxOf));
+    let t=tocMap[c.path];
+    if(!t){const h=c.body.querySelector('h1,h2,h3');t=h?h.textContent.trim():''}
+    return{t:(t||'Section '+(i+1)).slice(0,100),h:c.body.innerHTML};
+  });
+  return{title:(tn&&tn.textContent.trim())||'',author:(an&&an.textContent.trim())||'',chapters,index};
+}
+async function importEpub(f){
+  if(!window.JSZip){toast('The EPUB reader did not load. Check your connection and reload the page.');return}
+  toast('Reading book…');
+  let book;
+  try{book=await parseEpub(await window.JSZip.loadAsync(await f.arrayBuffer()))}catch(e){toast('That EPUB could not be read.');return}
+  if(!book.chapters.length){toast('No readable text found in that EPUB.');return}
+  const id=uid(),buf=new TextEncoder().encode(JSON.stringify({v:1,title:book.title,author:book.author,chapters:book.chapters})).buffer;
+  pdfCache[id]=buf;
+  let stored=true;try{await idbPut(id,buf)}catch(e){stored=false}
+  S.docs.unshift({id,kind:'epub',title:book.title||f.name.replace(/\.[^.]+$/,''),author:book.author,pages:book.chapters.length,toc:book.chapters.map(c=>c.t),index:book.index,text:'',groups:uploadGroup?[uploadGroup]:[],added:Date.now(),u:Date.now()});
+  save();syncSoon(500,true);openDoc(id,uploadGroup);
+  if(!stored)toast('This book could not be saved on this device and will disappear when you close the page.');
+}
+async function ensureFile(d,status){
+  let buf=pdfCache[d.id];
+  if(!buf){try{buf=await idbGet(d.id)}catch(e){}if(buf)pdfCache[d.id]=buf}
+  if(!buf&&d.asset){
+    if(status)status('Downloading from cloud storage…');
+    try{buf=await fetchAsset(d.asset);pdfCache[d.id]=buf;try{await idbPut(d.id,buf)}catch(e){}}catch(e){}
+  }
+  return buf||null;
+}
+async function renderEpubReader(d){
+  releasePdf();const token=renderToken;
+  const app=$('#app');app.classList.remove('wide');app.replaceChildren();
+  app.append(el('header',{class:'top'},
+    backBtn(),
+    el('div',{class:'brand',text:''}),
+    el('button',{class:'ghost',text:'Contents',onclick:showToc})));
+  app.append(el('h1',{class:'title',text:d.title}));
+  app.append(groupBar(d));
+  app.append(el('p',{class:'hint',text:(d.author?d.author+'. ':'')+'Select text to mark it. Tap a marked passage to open its note.'}));
+  app.append(el('div',{id:'notesbox'}));
+  const chap=el('div',{id:'chap'},el('div',{class:'empty',text:'Opening book…'}));app.append(chap);
+  app.append(el('div',{class:'chapnav',id:'chapnav'}));
+  const buf=await ensureFile(d,m=>chap.replaceChildren(el('div',{class:'empty',text:m})));
+  if(token!==renderToken)return;
+  if(!buf){chap.replaceChildren(el('div',{class:'empty',text:d.tooBig?'This book was too large to sync. Upload it again on this device to read it here. Your notes are still saved.':d.asset?'Could not download this book from cloud storage. Check your connection and reopen it.':'This book is no longer stored on this device. Upload it again to keep reading. Your notes are still saved.'}));return}
+  let book;
+  try{book=JSON.parse(new TextDecoder().decode(buf));if(!book.chapters||!book.chapters.length)throw 0}
+  catch(e){chap.replaceChildren(el('div',{class:'empty',text:'This book could not be opened.'}));return}
+  const pj=pendingJump&&annoById(pendingJump);
+  let ch=pj&&pj.doc===d.id&&pj.ch!=null?pj.ch:((d.pos&&d.pos.ch)||0);
+  E={doc:d,book,ch:Math.max(0,Math.min(book.chapters.length-1,ch))};
+  chap.addEventListener('click',onChapClick);
+  renderChapter();renderEpubNotes();
+  if(pendingJump)runPending();else if(d.pos&&d.pos.y&&d.pos.ch===E.ch)window.scrollTo(0,d.pos.y);
+}
+function cleanChapter(html){
+  const body=new DOMParser().parseFromString('<body>'+html+'</body>','text/html').body;
+  sanitizeTree(body,renderLink);
+  body.querySelectorAll('[id]').forEach(n=>n.id='bk-'+n.id);
+  return body;
+}
+function renderChapter(){
+  const box=$('#chap');if(!box||!E)return;
+  box.replaceChildren();
+  box.append(...cleanChapter(E.book.chapters[E.ch].h).childNodes);
+  decorateChapter(box,epubAnnos(E.doc.id).filter(a=>a.ch===E.ch));
+  paintNav();
+}
+function rerenderChapter(){const y=window.scrollY;renderChapter();window.scrollTo(0,y)}
+function paintNav(){
+  const nav=$('#chapnav');if(!nav||!E)return;nav.replaceChildren();
+  const n=E.book.chapters.length;
+  nav.append(el('button',{class:'ghost',text:'‹ Previous',disabled:E.ch<=0,onclick:()=>gotoChapter(E.ch-1)}),
+    el('span',{text:`${E.ch+1} of ${n} · ${E.book.chapters[E.ch].t}`}),
+    el('button',{class:'ghost',text:'Next ›',disabled:E.ch>=n-1,onclick:()=>gotoChapter(E.ch+1)}));
+}
+function savePos(){if(E){E.doc.pos={ch:E.ch,y:window.scrollY};save()}}
+function gotoChapter(i,frag){
+  if(!E)return;
+  E.ch=Math.max(0,Math.min(E.book.chapters.length-1,i));renderChapter();
+  if(frag){const t=document.getElementById('bk-'+frag);if(t){t.scrollIntoView({block:'start'});savePos();return}}
+  window.scrollTo(0,0);savePos();
+}
+function showToc(){
+  if(!E)return;
+  const ov=el('div',{class:'picker',role:'dialog','aria-label':'Contents'});
+  const sheet=el('div',{class:'psheet'},el('div',{class:'row'},el('strong',{text:'Contents'}),el('button',{class:'ghost',text:'Close',onclick:()=>ov.remove()})));
+  E.book.chapters.forEach((c,i)=>sheet.append(el('button',{class:'toc-item'+(i===E.ch?' cur':''),text:c.t,onclick:()=>{ov.remove();gotoChapter(i)}})));
+  ov.append(sheet);ov.addEventListener('click',e=>{if(e.target===ov)ov.remove()});document.body.append(ov);
+}
+function onChapClick(e){
+  const lk=e.target.closest('a[href]');
+  if(lk&&!e.target.closest('.notecard')){
+    const m=lk.getAttribute('href').match(/^#ch\/(\d+)\/(.*)$/);
+    if(m){e.preventDefault();gotoChapter(+m[1],decodeURIComponent(m[2]));return}
+  }
+  if(e.target.closest('.notecard,.marker'))return;
+  const sel=getSelection();if(sel&&!sel.isCollapsed)return;
+  const s=e.target.closest('span[data-ids]');if(!s)return;
+  const ids=s.dataset.ids.split(',');toggleNote(ids[ids.length-1]);
+}
+function textNodesOf(box){
+  const w=document.createTreeWalker(box,NodeFilter.SHOW_TEXT),list=[];let off=0,n;
+  while((n=w.nextNode())){
+    if(n.parentElement&&n.parentElement.closest('[data-skip]'))continue;
+    list.push({n,s:off,e:off+n.nodeValue.length});off+=n.nodeValue.length;
+  }
+  return{list,total:off};
+}
+function styleSeg(sp,a,b,cov){
+  cov.forEach(x=>{
+    if(x.type==='highlight')sp.style.backgroundColor=`var(--c-${x.color})`;
+    if(x.type==='underline'){sp.style.textDecoration='underline';sp.style.textDecorationColor=`var(--u-${x.color})`;sp.style.textDecorationThickness='2px';sp.style.textUnderlineOffset='4px'}
+    if(x.type==='circle'){
+      const bc=`2px solid var(--u-${x.color})`;
+      sp.style.borderTop=bc;sp.style.borderBottom=bc;sp.style.padding='1px 0';
+      if(a===x.start){sp.style.borderLeft=bc;sp.style.borderTopLeftRadius='14px';sp.style.borderBottomLeftRadius='14px';sp.style.paddingLeft='4px'}
+      if(b===x.end){sp.style.borderRight=bc;sp.style.borderTopRightRadius='14px';sp.style.borderBottomRightRadius='14px';sp.style.paddingRight='4px'}
+    }
+  });
+}
+function decorateChapter(box,an){
+  if(!an.length)return;
+  const {list}=textNodesOf(box);
+  const bounds=[...new Set(an.flatMap(a=>[a.start,a.end]))].sort((x,y)=>x-y);
+  const ends=[];
+  list.forEach(({n,s,e})=>{
+    if(!an.some(a=>a.start<e&&a.end>s))return;
+    const val=n.nodeValue,edges=[s,...bounds.filter(b=>b>s&&b<e),e],frag=document.createDocumentFragment();
+    for(let i=0;i<edges.length-1;i++){
+      const a0=edges[i],b0=edges[i+1],txt=val.slice(a0-s,b0-s);
+      const cov=an.filter(x=>x.start<=a0&&x.end>=b0);
+      if(!cov.length){frag.append(document.createTextNode(txt));continue}
+      const sp=document.createElement('span');sp.textContent=txt;sp.dataset.ids=cov.map(x=>x.id).join(',');
+      styleSeg(sp,a0,b0,cov);frag.append(sp);
+      an.forEach(x=>{if(x.end===b0)ends.push({x,sp})});
+    }
+    n.replaceWith(frag);
+  });
+  ends.forEach(({x,sp})=>{
+    if(hasNote(x))sp.after(el('button',{class:'marker','data-skip':'1','aria-label':'Show note',text:'note',onclick:ev=>{ev.stopPropagation();toggleNote(x.id)}}));
+    if(openNotes.has(x.id)){
+      const card=epubCard(x),blk=sp.closest('p,li,blockquote,h1,h2,h3,h4,h5,h6,td,th,pre,figcaption,dd,dt,div');
+      if(!blk||blk===box||!box.contains(blk))sp.after(card);
+      else if(/^(LI|TD|TH|DD|DT)$/.test(blk.tagName))blk.append(card);
+      else blk.after(card);
+    }
+  });
+}
+function epubCard(a){
+  const ta=el('textarea',{placeholder:'Explain it in your own words, add a question, link an idea…','aria-label':'Note'});
+  ta.value=a.note||'';const tg=tagsBlock(a);
+  ta.addEventListener('input',()=>{a.note=ta.value;touch(a);tg.paint()});
+  const rr=()=>{rerenderChapter();renderEpubNotes()};
+  const sw=el('div',{class:'swatches'},COLORS.map(c=>el('button',{class:'sw'+(a.color===c?' sel':''),'data-c':c,'aria-label':c,onclick:()=>{a.color=c;touch(a);rr()}})));
+  const types=el('div',{class:'seg',style:'margin-bottom:8px'},['highlight','underline','circle'].map(tp=>el('button',{class:a.type===tp?'sel':'',text:tp[0].toUpperCase()+tp.slice(1),onclick:()=>{a.type=tp;touch(a);rr()}})));
+  return el('div',{class:'notecard','data-skip':'1',id:'nc-'+a.id},
+    el('span',{class:'lbl',text:'Your note (use #tags to group notes)'}),ta,tg,linksBlock(a,rr),types,
+    el('div',{class:'row'},sw,el('div',{class:'row'},
+      el('button',{class:'ghost danger',text:'Remove mark',onclick:()=>{a.del=true;touch(a);openNotes.delete(a.id);rr()}}),
+      el('button',{class:'primary',text:'Done',onclick:()=>{openNotes.delete(a.id);rr()}}))));
+}
+function renderEpubNotes(){
+  const box=$('#notesbox');if(!box||!E)return;box.replaceChildren();
+  const d=E.doc,an=epubAnnos(d.id),withNotes=an.filter(hasNote);
+  box.append(el('button',{class:'notesbtn','aria-expanded':panelOpen,onclick:()=>{panelOpen=!panelOpen;renderEpubNotes()}},
+    el('span',{text:`My notes (${withNotes.length}) · ${an.length} marks`}),el('span',{class:'chev',text:'▾'})));
+  if(panelOpen){
+    const list=el('div',{class:'notes-list'});
+    if(!an.length)list.append(el('div',{class:'empty',style:'padding:16px 0',text:'No marks yet. Select text to begin.'}));
+    an.forEach(a=>list.append(el('div',{class:'note-item',style:`border-left-color:var(--u-${a.color})`,onclick:()=>jumpEpub(a)},
+      el('small',{text:where(a)}),el('q',{text:'“'+snippet(d,a)+'”'}),
+      el('p',{class:hasNote(a)?'':'none',text:hasNote(a)?a.note:'No note yet'}))));
+    if(withNotes.length)list.append(el('button',{class:'ghost',style:'margin-top:6px',text:'Copy all notes',onclick:()=>copyNotes(d,withNotes)}));
+    box.append(list);
+  }
+}
+function jumpEpub(a){
+  openNotes.add(a.id);panelOpen=false;
+  if(a.ch!==E.ch){E.ch=a.ch;renderChapter();window.scrollTo(0,0)}else rerenderChapter();
+  renderEpubNotes();
+  const sp=document.querySelector('#chap span[data-ids*="'+a.id+'"]');
+  if(sp){sp.scrollIntoView({behavior:'smooth',block:'center'});sp.classList.add('flash');setTimeout(()=>sp.classList.remove('flash'),1500)}
+  savePos();
+}
+function readEpubSelection(){
+  const sel=getSelection();if(!E||!sel||!sel.rangeCount||sel.isCollapsed)return null;
+  const r=sel.getRangeAt(0),box=$('#chap');
+  if(!box||!box.contains(r.commonAncestorContainer))return null;
+  const {list,total}=textNodesOf(box);
+  const at=(node,o)=>{
+    if(node.nodeType===3){const it=list.find(x=>x.n===node);if(it)return it.s+o}
+    const pr=document.createRange();pr.setStart(node,o);pr.collapse(true);
+    for(const it of list){if(pr.comparePoint(it.n,0)>=0)return it.s}
+    return total;
+  };
+  let s=at(r.startContainer,r.startOffset),e=at(r.endContainer,r.endOffset);
+  if(s>e)[s,e]=[e,s];
+  const txt=list.map(x=>x.n.nodeValue).join('');
+  while(s<e&&/\s/.test(txt[s]))s++;
+  while(e>s&&/\s/.test(txt[e-1]))e--;
+  return e>s?{ch:E.ch,start:s,end:e,text:txt.slice(s,e).slice(0,600)}:null;
+}
+function applyEpub(withNote){
+  const a={id:uid(),doc:S.cur,ch:pending.ch,start:pending.start,end:pending.end,type:mode,color,note:'',text:pending.text,u:Date.now()};
+  S.annos.push(a);save();markDirty(S.cur);
+  if(withNote)openNotes.add(a.id);
+  pending=null;barBusy=false;
+  const sel=getSelection();if(sel)sel.removeAllRanges();
+  hideBar();rerenderChapter();renderEpubNotes();
+  if(withNote){const c=document.getElementById('nc-'+a.id);if(c){c.scrollIntoView({block:'center'});const t=c.querySelector('textarea');if(t)t.focus({preventScroll:true})}}
+}
+window.addEventListener('scroll',()=>{if(!E)return;clearTimeout(E.t);E.t=setTimeout(savePos,700)},{passive:true});
+
+/* ---------- Groups ---------- */
+const liveGroups=()=>S.groups.filter(g=>!g.del);
+const groupById=id=>S.groups.find(g=>g.id===id&&!g.del);
+const groupDocs=gid=>S.docs.filter(d=>(d.groups||[]).includes(gid));
+const docGroupList=d=>(d.groups||[]).map(groupById).filter(Boolean);
+const groupNoteCount=gid=>groupDocs(gid).reduce((n,d)=>n+allAnnos(d).filter(hasNote).length,0);
+const kindLabel=d=>d.kind==='pdf'?`${d.pages} pages`:d.kind==='epub'?`${d.pages} sections`:`${d.words||(d.text?d.text.split(/\s+/).length:0)} words`;
+const gstate={q:'',tag:null,mode:'source'};
+let gRename=false;
+function newGroup(name){const g={id:uid(),name:name.trim()||'Untitled group',u:Date.now()};S.groups.push(g);save();syncSoon(600,true);return g}
+function setMember(d,gid,on){
+  const cur=new Set(d.groups||[]);if(on)cur.add(gid);else cur.delete(gid);
+  d.groups=[...cur];d.u=Date.now();save();syncSoon(800,true);
+}
+function renameGroup(g,name){if(name.trim()){g.name=name.trim();g.u=Date.now();save();syncSoon(600,true)}}
+function deleteGroup(g){
+  g.del=true;g.u=Date.now();
+  S.docs.forEach(d=>{if((d.groups||[]).includes(g.id)){d.groups=d.groups.filter(x=>x!==g.id);d.u=Date.now()}});
+  save();syncSoon(600,true);
+}
+async function putGroup(g){await sync.col.doc('g_'+g.id).set({name:g.name,deleted:!!g.del,u:g.u||Date.now()})}
+function backBtn(){
+  const g=ctxGroup&&groupById(ctxGroup);
+  return el('button',{class:'ghost',text:g?'‹ '+(g.name.length>14?g.name.slice(0,14)+'…':g.name):'‹ Library',onclick:()=>{
+    view='library';hideBar();
+    if(g){libTab='groups';openGroup=g.id}
+    renderLibrary();
+  }});
+}
+function groupBar(d){
+  const box=el('div',{class:'gbar'}),gs=docGroupList(d);
+  box.append(el('button',{class:'ghost small',text:gs.length?('Groups: '+gs.map(g=>g.name).join(', ')).slice(0,44):'＋ Add to a group',onclick:()=>showMembership(d,()=>box.replaceWith(groupBar(d)))}));
+  if(ctxGroup&&groupById(ctxGroup))box.append(el('button',{class:'primary small',text:'Group notes',onclick:()=>showGroupSheet(ctxGroup)}));
+  return box;
+}
+function showMembership(d,done){
+  const ov=el('div',{class:'picker',role:'dialog','aria-label':'Groups'}),sheet=el('div',{class:'psheet'});ov.append(sheet);
+  const close=()=>{ov.remove();if(done)done()};
+  const paint=()=>{
+    sheet.replaceChildren(el('div',{class:'row'},el('strong',{text:'Groups for “'+d.title.slice(0,28)+'”'}),el('button',{class:'ghost',text:'Done',onclick:close})));
+    liveGroups().forEach(g=>{const on=(d.groups||[]).includes(g.id);sheet.append(el('button',{class:'toc-item'+(on?' cur':''),text:(on?'☑ ':'☐ ')+g.name,onclick:()=>{setMember(d,g.id,!on);paint()}}))});
+    if(!liveGroups().length)sheet.append(el('div',{class:'empty',style:'padding:14px 0',text:'No groups yet. Create one below.'}));
+    const inp=el('input',{type:'text',placeholder:'New group name','aria-label':'New group name'});
+    sheet.append(el('div',{class:'row',style:'margin-top:12px;flex-wrap:nowrap'},inp,el('button',{class:'primary',text:'Create',onclick:()=>{if(!inp.value.trim())return;const g=newGroup(inp.value);setMember(d,g.id,true);paint()}})));
+  };
+  ov.addEventListener('click',e=>{if(e.target===ov)close()});
+  document.body.append(ov);paint();
+}
+function showAddToGroup(gid){
+  const g=groupById(gid);if(!g)return;
+  const ov=el('div',{class:'picker',role:'dialog','aria-label':'Add to group'}),sheet=el('div',{class:'psheet'});ov.append(sheet);
+  const close=()=>{ov.remove();if(openGroup===gid)fillGroupBody()};
+  const paint=()=>{
+    sheet.replaceChildren(el('div',{class:'row'},el('strong',{text:'Add to “'+g.name+'”'}),el('button',{class:'ghost',text:'Done',onclick:close})));
+    const rest=S.docs.filter(d=>!(d.groups||[]).includes(gid));
+    if(!rest.length)sheet.append(el('div',{class:'empty',style:'padding:14px 0',text:'Everything in your library is already in this group.'}));
+    rest.forEach(d=>sheet.append(el('button',{class:'toc-item',text:'＋ '+d.title+'  ('+kindLabel(d)+')',onclick:()=>{setMember(d,gid,true);paint()}})));
+  };
+  ov.addEventListener('click',e=>{if(e.target===ov)close()});
+  document.body.append(ov);paint();
+}
+function showGroupSheet(gid){
+  const g=groupById(gid);if(!g)return;
+  const ov=el('div',{class:'picker',role:'dialog','aria-label':'Group notes'}),sheet=el('div',{class:'psheet'});ov.append(sheet);
+  sheet.append(el('div',{class:'row'},el('strong',{text:g.name}),el('button',{class:'ghost',text:'Close',onclick:()=>ov.remove()})));
+  sheet.append(el('div',{class:'row',style:'margin-bottom:10px'},groupDocs(gid).map(d=>el('button',{class:'ghost small'+(d.id===S.cur?' sel':''),text:d.title.slice(0,24),onclick:()=>{ov.remove();openDoc(d.id,gid)}}))));
+  sheet.append(notesPanel(gid,a=>{ov.remove();gotoAnno(a,gid)}));
+  ov.addEventListener('click',e=>{if(e.target===ov)ov.remove()});
+  document.body.append(ov);
+}
+function notesPanel(gid,pick){
+  const st=gstate,wrap=el('div'),dyn=el('div');
+  const sb=el('input',{type:'search',placeholder:'Search notes and text in this group','aria-label':'Search this group',value:st.q});
+  const paint=()=>{
+    dyn.replaceChildren();
+    const docs=groupDocs(gid),all=[];
+    docs.forEach(d=>allAnnos(d).filter(hasNote).forEach(a=>all.push(a)));
+    const counts={};all.forEach(a=>tagsOf(a).forEach(t=>counts[t]=(counts[t]||0)+1));
+    if(st.tag&&!counts[st.tag])st.tag=null;
+    dyn.append(el('div',{class:'tagrow'},
+      el('button',{class:'tagchip'+(!st.tag?' on':''),text:`All (${all.length})`,onclick:()=>{st.tag=null;paint()}}),
+      Object.keys(counts).sort().map(t=>el('button',{class:'tagchip'+(st.tag===t?' on':''),text:`${t} (${counts[t]})`,onclick:()=>{st.tag=t;paint()}}))));
+    dyn.append(el('div',{class:'seg',style:'margin-bottom:8px'},[['source','By source'],['all','All together']].map(([k,l])=>el('button',{class:st.mode===k?'sel':'',text:l,onclick:()=>{st.mode=k;paint()}}))));
+    const ql=st.q.trim().toLowerCase();
+    const items=all.filter(a=>(!st.tag||tagsOf(a).includes(st.tag))&&matchNote(a,ql));
+    if(st.mode==='source'){
+      docs.forEach(d=>{
+        const its=items.filter(a=>a.doc===d.id);if(!its.length)return;
+        dyn.append(el('h4',{class:'srchead',text:`${d.title} (${its.length})`}));
+        its.forEach(x=>dyn.append(noteItem(x,()=>pick(x))));
+      });
+    }else items.slice().sort((x,y)=>(y.u||0)-(x.u||0)).forEach(x=>dyn.append(noteItem(x,()=>pick(x))));
+    if(ql&&!st.tag){
+      const hits=docs.filter(d=>(((d.kind==='pdf'||d.kind==='epub')?d.index:(d.text||d.index))||'').toLowerCase().includes(ql));
+      if(hits.length){
+        dyn.append(el('h4',{class:'srchead',text:'Text matches (searches the start of each file)'}));
+        hits.forEach(d=>{
+          const body=(((d.kind==='pdf'||d.kind==='epub')?d.index:(d.text||d.index))||''),i=body.toLowerCase().indexOf(ql);
+          const snip=body.slice(Math.max(0,i-50),i+90).replace(/\s+/g,' ');
+          dyn.append(el('div',{class:'nitem',onclick:()=>openDoc(d.id,gid)},el('small',{text:d.title}),el('q',{text:'…'+snip+'…'})));
+        });
+      }
+    }
+    if(!items.length&&!(ql&&docs.some(d=>(((d.kind==='pdf'||d.kind==='epub')?d.index:(d.text||d.index))||'').toLowerCase().includes(ql))))
+      dyn.append(el('div',{class:'empty',style:'padding:20px 0',text:all.length?'No notes match.':'Notes you write on anything in this group will appear here, together.'}));
+  };
+  sb.addEventListener('input',()=>{st.q=sb.value;paint()});
+  wrap.append(sb,dyn);paint();return wrap;
+}
+function groupMarkdown(gid){
+  const g=groupById(gid);if(!g)return '';
+  const out=[`# ${g.name}`,''],tagMap={};
+  const ref=a=>{const d=docOf(a.doc),w=where(a);return (d?d.title:'')+(w?' ['+w+']':'')};
+  groupDocs(gid).forEach(d=>{
+    const ns=allAnnos(d).filter(hasNote);if(!ns.length)return;
+    out.push(`## ${d.title}${d.author?' — '+d.author:''}`,'');
+    ns.forEach(a=>{
+      const w=where(a);
+      out.push(`- ${w?'['+w+'] ':''}“${snippet(d,a,400)}”`,'  '+a.note.replace(/\n/g,'\n  '));
+      const rel=(a.links||[]).map(annoById).filter(Boolean).map(ref);
+      if(rel.length)out.push('  Related: '+rel.join('; '));
+      out.push('');
+      tagsOf(a).forEach(t=>{(tagMap[t]=tagMap[t]||[]).push(a)});
+    });
+  });
+  const tags=Object.keys(tagMap).sort();
+  if(tags.length){
+    out.push('## Notes by tag','');
+    tags.forEach(t=>{out.push(`### ${t}`,'');tagMap[t].forEach(a=>out.push(`- ${a.note.replace(/\s+/g,' ').slice(0,200)} — ${ref(a)}`));out.push('')});
+  }
+  return out.join('\n');
+}
+function copyGroup(gid){
+  const md=groupMarkdown(gid),done=()=>toast('Group notes copied');
+  try{navigator.clipboard.writeText(md).then(done,()=>toast('Copy not allowed here. Use Save notes file.'))}catch(e){toast('Copy not allowed here. Use Save notes file.')}
+}
+async function saveTextFile(name,text){
+  let dl=null;try{dl=window.claude&&await window.claude.use('downloads')}catch(e){}
+  if(dl){try{await dl.save({filename:name,data:text});toast('Saved')}catch(e){if(!e||e.code!=='declined')toast('Could not save the file')}return}
+  try{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type:'text/markdown'}));a.download=name;document.body.append(a);a.click();a.remove();toast('Saved')}catch(e){toast('Could not save the file')}
+}
+function saveGroup(gid){const g=groupById(gid);if(g)saveTextFile((g.name.replace(/[^\w\- ]+/g,'').trim()||'group')+' - notes.md',groupMarkdown(gid))}
+function renderGroupsTab(){
+  if(openGroup&&groupById(openGroup))renderGroupView();else{openGroup=null;renderGroupsHome()}
+}
+function renderGroupsHome(){
+  const app=$('#app');
+  const inp=el('input',{type:'text',placeholder:'New group, e.g. “Memory research”','aria-label':'New group name'});
+  const make=()=>{if(!inp.value.trim()){toast('Give the group a name');return}const g=newGroup(inp.value);openGroup=g.id;renderLibrary()};
+  inp.addEventListener('keydown',e=>{if(e.key==='Enter')make()});
+  app.append(el('div',{class:'lib-actions row',style:'flex-wrap:nowrap'},inp,el('button',{class:'primary',text:'Create',onclick:make})),el('div',{id:'list'}));
+  fillGroupsHome();
+}
+function fillGroupsHome(){
+  const list=$('#list');if(!list)return;list.replaceChildren();
+  const gs=liveGroups();
+  if(!gs.length){list.append(el('div',{class:'empty',text:'Make a group for a topic, then collect the PDFs, books and essays you read about it. Read them in one place and see every note together.'}));return}
+  gs.slice().sort((a,b)=>a.name.localeCompare(b.name)).forEach(g=>{
+    const n=groupDocs(g.id).length,m=groupNoteCount(g.id);
+    list.append(el('div',{class:'doc'},el('button',{class:'open',onclick:()=>{openGroup=g.id;renderLibrary()}},el('h3',{text:g.name}),el('div',{class:'meta',text:`${n} item${n===1?'':'s'}, ${m} note${m===1?'':'s'}`}))));
+  });
+}
+function renderGroupView(){
+  const app=$('#app'),g=groupById(openGroup);
+  app.append(el('div',{class:'row',style:'margin:14px 0 4px'},el('button',{class:'ghost',text:'‹ All groups',onclick:()=>{openGroup=null;gRename=false;renderLibrary()}})));
+  if(gRename){
+    const inp=el('input',{type:'text',value:g.name,'aria-label':'Group name'});
+    const save1=()=>{renameGroup(g,inp.value);gRename=false;renderLibrary()};
+    inp.addEventListener('keydown',e=>{if(e.key==='Enter')save1()});
+    app.append(el('div',{class:'row',style:'margin:10px 0;flex-wrap:nowrap'},inp,el('button',{class:'primary',text:'Save',onclick:save1}),el('button',{class:'ghost',text:'Cancel',onclick:()=>{gRename=false;renderLibrary()}})));
+  }else app.append(el('h1',{class:'title',style:'margin-top:8px',text:g.name}));
+  const up=el('input',{type:'file',accept:'.pdf,application/pdf,.epub,application/epub+zip,.txt,.md,text/plain',style:'display:none'});
+  up.addEventListener('change',()=>{const f=up.files[0];up.value='';if(f){uploadGroup=g.id;importFile(f)}});
+  const delBtn=el('button',{class:'ghost small danger',text:'Delete group',onclick:()=>{
+    if(!delBtn.dataset.arm){delBtn.dataset.arm='1';delBtn.textContent='Tap again: files stay in your library';setTimeout(()=>{if(delBtn.isConnected){delBtn.dataset.arm='';delBtn.textContent='Delete group'}},3500);return}
+    deleteGroup(g);openGroup=null;renderLibrary();toast('Group deleted');
+  }});
+  app.append(el('div',{class:'row'},
+    el('button',{class:'primary small',text:'Upload here',onclick:()=>up.click()}),up,
+    el('button',{class:'ghost small',text:'Add from library',onclick:()=>showAddToGroup(g.id)}),
+    el('button',{class:'ghost small',text:'Copy notes',onclick:()=>copyGroup(g.id)}),
+    el('button',{class:'ghost small',text:'Save notes file',onclick:()=>saveGroup(g.id)}),
+    el('button',{class:'ghost small',text:'Rename',onclick:()=>{gRename=true;renderLibrary()}}),
+    delBtn));
+  app.append(el('div',{id:'list',style:'margin-top:6px'}));
+  fillGroupBody();
+}
+function fillGroupBody(){
+  const list=$('#list');if(!list||!openGroup)return;list.replaceChildren();
+  const gid=openGroup,docs=groupDocs(gid);
+  list.append(el('h4',{class:'srchead',text:`In this group (${docs.length})`}));
+  if(!docs.length)list.append(el('div',{class:'empty',style:'padding:16px 0',text:'Nothing here yet. Upload a file to this group, or add items you already have.'}));
+  docs.forEach(d=>{
+    const an=allAnnos(d),notes=an.filter(hasNote).length;
+    list.append(el('div',{class:'doc'},
+      el('button',{class:'open',onclick:()=>openDoc(d.id,gid)},el('h3',{text:d.title}),el('div',{class:'meta',text:`${kindLabel(d)}, ${an.length} marks, ${notes} notes`})),
+      el('button',{class:'ghost small danger',style:'margin-top:8px',text:'Remove from group',onclick:()=>{setMember(d,gid,false);fillGroupBody()}})));
+  });
+  list.append(el('h4',{class:'srchead',text:'Notes across this group'}));
+  list.append(notesPanel(gid,a=>gotoAnno(a,gid)));
+}
+
+/* ---------- Cloud sync (Claude page storage) ---------- */
+const sync={state:'init',msg:'Connecting to cloud storage…',last:0,col:null,assets:null,running:false,again:false,againFull:false,timer:null,wantFull:false,usage:null};
+const MAXB=1536*1024*1024;
+const cl=x=>JSON.parse(JSON.stringify(x));
+const stable=v=>JSON.stringify(v,(k,x)=>x&&typeof x==='object'&&!Array.isArray(x)?Object.keys(x).sort().reduce((o,kk)=>(o[kk]=x[kk],o),{}):x);
+function touch(a){a.u=Date.now();save();markDirty(a.doc)}
+function markDirty(id){dirty.add(id);syncSoon(3000,false)}
+function fmtMB(n){return (n/1048576).toFixed(n<10485760?1:0)}
+function setSync(state,msg){sync.state=state;sync.msg=msg;paintSync()}
+function paintSync(){
+  const e=$('#syncst');if(!e)return;
+  e.className='syncst '+(sync.state==='ok'||sync.state==='syncing'||sync.state==='error'?sync.state:'');
+  e.replaceChildren(el('span',{class:'dot'}),el('span',{text:sync.msg}));
+  if(sync.state==='needconnect'||sync.needAuth)e.append(el('button',{class:'primary small',text:sync.needAuth?'Reconnect Google Drive':'Connect Google Drive',onclick:()=>driveUserConnect()}));
+  else if(sync.col&&sync.state!=='syncing')e.append(el('button',{class:'ghost',text:'Sync now',onclick:()=>syncSoon(0,true)}));
+}
+
+/* ---------- Google Drive backend ---------- */
+const GAPI='https://www.googleapis.com/drive/v3',GUP='https://www.googleapis.com/upload/drive/v3',GIS_URL='https://accounts.google.com/gsi/client';
+const GCFG=Object.assign({clientId:'',resumableOver:100*1024*1024},window.MARGINALIA_CONFIG||{});
+const DRIVE={tok:null,exp:0,idx:{},cache:null,lastTry:0};
+const nap=ms=>new Promise(r=>setTimeout(r,ms));
+function gerr(code,msg){const e=new Error(msg||code);e.code=code;return e}
+function fmtSize(n){return n>=1073741824?(n/1073741824).toFixed(1)+' GB':(n/1048576).toFixed(n<10485760?1:0)+' MB'}
+async function pool(items,n,fn){let i=0;await Promise.all(Array.from({length:Math.min(n,items.length)},async()=>{while(i<items.length){const k=items[i++];await fn(k)}}))}
+async function cloudAll(){const db=await idb();return new Promise((res,rej)=>{const out={},q=db.transaction('cloud','readonly').objectStore('cloud').openCursor();q.onsuccess=()=>{const c=q.result;if(c){out[c.key]=c.value;c.continue()}else res(out)};q.onerror=()=>rej(q.error)})}
+async function cloudPut(k,v){const db=await idb();return new Promise((res,rej)=>{const t=db.transaction('cloud','readwrite');t.objectStore('cloud').put(v,k);t.oncomplete=()=>res();t.onerror=()=>rej(t.error)})}
+async function cloudDel(k){const db=await idb();return new Promise((res,rej)=>{const t=db.transaction('cloud','readwrite');t.objectStore('cloud').delete(k);t.oncomplete=()=>res();t.onerror=()=>rej(t.error)})}
+async function cloudCache(){if(!DRIVE.cache)DRIVE.cache=await cloudAll().catch(()=>({}));return DRIVE.cache}
+function loadGIS(){
+  return new Promise((res,rej)=>{
+    if(window.google&&window.google.accounts&&window.google.accounts.oauth2)return res();
+    const s=document.createElement('script');s.src=GIS_URL;s.async=true;
+    s.onload=()=>res();s.onerror=()=>rej(gerr('gis','Could not load Google sign-in'));document.head.append(s);
+  });
+}
+function driveConnect(interactive){
+  return loadGIS().then(()=>new Promise((resolve,reject)=>{
+    const tc=window.google.accounts.oauth2.initTokenClient({
+      client_id:GCFG.clientId,scope:'https://www.googleapis.com/auth/drive.appdata',
+      callback:r=>{
+        if(!r||r.error||!r.access_token){reject(gerr('auth',(r&&r.error)||'no token'));return}
+        DRIVE.tok=r.access_token;DRIVE.exp=Date.now()+((+r.expires_in||3600)*1000);
+        try{localStorage.setItem('marginalia:gd','1')}catch(e){}
+        resolve();
+      },
+      error_callback:e=>reject(gerr('auth',(e&&e.type)||'popup'))
+    });
+    tc.requestAccessToken({prompt:interactive?'':'none'});
+  }));
+}
+function attachDrive(){sync.col=driveCol;sync.assets=driveAssets;sync.needAuth=false}
+async function driveUserConnect(){
+  setSync('syncing','Connecting to Google Drive…');
+  try{await driveConnect(true);attachDrive();syncSoon(0,true)}
+  catch(e){setSync('needconnect','Could not connect to Google Drive ('+(e&&e.message||'cancelled')+'). Your data is still saved on this device.')}
+}
+async function syncInit(){
+  const cid=GCFG.clientId||'';
+  if(!cid||/PASTE_YOUR_CLIENT_ID/.test(cid)){setSync('off','Saved on this device only. Add your Google client ID to turn on sync (see SETUP.md).');return}
+  setSync('needconnect','Not connected to Google Drive yet. Your data is saved on this device.');
+  let was=null;try{was=localStorage.getItem('marginalia:gd')}catch(e){}
+  if(was){
+    try{await driveConnect(false);attachDrive();syncSoon(0,true)}
+    catch(e){setSync('needconnect','Sign in to Google Drive to sync. Your data is saved on this device.')}
+  }
+}
+async function gfetch(url,opts,again){
+  opts=opts||{};
+  if(DRIVE.tok&&Date.now()>DRIVE.exp-60000&&Date.now()-DRIVE.lastTry>30000){DRIVE.lastTry=Date.now();try{await driveConnect(false)}catch(e){}}
+  if(!DRIVE.tok||Date.now()>DRIVE.exp){DRIVE.tok=null;sync.needAuth=true;paintSync();throw gerr('auth','Signed out')}
+  const r=await fetch(url,Object.assign({},opts,{headers:Object.assign({},opts.headers||{},{Authorization:'Bearer '+DRIVE.tok})}));
+  if(r.status===401){DRIVE.tok=null;sync.needAuth=true;paintSync();throw gerr('auth','Signed out')}
+  if((r.status===429||r.status>=500)&&!again){await nap(900+Math.random()*900);return gfetch(url,opts,true)}
+  if(!r.ok){
+    let reason='';try{const j=await r.clone().json();reason=(((j.error||{}).errors||[{}])[0]||{}).reason||''}catch(e){}
+    throw gerr(r.status===403&&/quota/i.test(reason)?'quota_exceeded':(r.status===403||r.status===429)?'rate_limited':'drive_'+r.status,'Drive '+r.status+(reason?' '+reason:''));
+  }
+  return r;
+}
+async function driveListAll(){
+  const out=[];let tok='';
+  do{
+    const u=GAPI+'/files?spaces=appDataFolder&pageSize=1000&fields='+encodeURIComponent('nextPageToken,files(id,name,modifiedTime,size)')+(tok?'&pageToken='+encodeURIComponent(tok):'');
+    const j=await (await gfetch(u)).json();out.push(...(j.files||[]));tok=j.nextPageToken||'';
+  }while(tok);
+  return out;
+}
+async function driveMeta(name){
+  const q=encodeURIComponent(`name='${name}.json' and trashed=false`);
+  const j=await (await gfetch(GAPI+'/files?spaces=appDataFolder&orderBy=modifiedTime%20desc&pageSize=1&fields='+encodeURIComponent('files(id,modifiedTime)')+'&q='+q)).json();
+  const f=(j.files||[])[0];if(f)DRIVE.idx[name]=f.id;return f||null;
+}
+function multipart(meta,blob){
+  const boundary='mg'+uid()+uid()+uid();
+  return{boundary,blob:new Blob([`--${boundary}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n${JSON.stringify(meta)}\r\n--${boundary}\r\nContent-Type: ${blob.type||'application/octet-stream'}\r\n\r\n`,blob,`\r\n--${boundary}--`])};
+}
+async function driveWriteJson(name,obj){
+  const id=DRIVE.idx[name]||((await driveMeta(name))||{}).id;
+  const meta=id?{}:{name:name+'.json',parents:['appDataFolder']};
+  const b=multipart(meta,new Blob([JSON.stringify(obj)],{type:'application/json'}));
+  const url=(id?`${GUP}/files/${id}`:`${GUP}/files`)+'?uploadType=multipart&fields=id,modifiedTime';
+  const j=await (await gfetch(url,{method:id?'PATCH':'POST',headers:{'Content-Type':'multipart/related; boundary='+b.boundary},body:b.blob})).json();
+  DRIVE.idx[name]=j.id;const c=await cloudCache();
+  c[name]={id:j.id,mt:j.modifiedTime,content:cl(obj)};await cloudPut(name,c[name]).catch(()=>{});
+}
+const driveCol={
+  limit(){return driveCol},
+  async get(){
+    const cache=await cloudCache(),files=await driveListAll(),best={},dups=[];
+    files.filter(f=>/\.json$/.test(f.name)).sort((a,b)=>a.modifiedTime<b.modifiedTime?1:-1).forEach(f=>{const k=f.name.slice(0,-5);if(best[k])dups.push(f);else best[k]=f});
+    dups.forEach(f=>gfetch(GAPI+'/files/'+f.id,{method:'DELETE'}).catch(()=>{}));
+    DRIVE.idx={};Object.keys(best).forEach(k=>DRIVE.idx[k]=best[k].id);
+    for(const k of Object.keys(cache)){if(!best[k]){delete cache[k];cloudDel(k).catch(()=>{})}}
+    const need=Object.keys(best).filter(k=>!cache[k]||cache[k].mt!==best[k].modifiedTime||cache[k].id!==best[k].id);
+    await pool(need,6,async k=>{
+      try{const content=await (await gfetch(GAPI+'/files/'+best[k].id+'?alt=media')).json();cache[k]={id:best[k].id,mt:best[k].modifiedTime,content};await cloudPut(k,cache[k]).catch(()=>{})}
+      catch(e){if(e&&e.code==='auth')throw e;delete cache[k]}
+    });
+    return{docs:Object.keys(best).filter(k=>cache[k]).map(k=>({id:k,exists:true,data:()=>cl(cache[k].content)}))};
+  },
+  doc(name){return{
+    async get(){
+      const cache=await cloudCache(),m=await driveMeta(name);
+      if(!m)return{id:name,exists:false,data:()=>undefined};
+      let c=cache[name];
+      if(!c||c.mt!==m.modifiedTime||c.id!==m.id){
+        const content=await (await gfetch(GAPI+'/files/'+m.id+'?alt=media')).json();
+        c=cache[name]={id:m.id,mt:m.modifiedTime,content};await cloudPut(name,c).catch(()=>{});
+      }
+      return{id:name,exists:true,data:()=>cl(c.content)};
+    },
+    async set(obj){await driveWriteJson(name,obj)},
+    async delete(){
+      const id=DRIVE.idx[name]||((await driveMeta(name))||{}).id;
+      if(id){try{await gfetch(GAPI+'/files/'+id,{method:'DELETE'})}catch(e){if(!e||e.code!=='drive_404')throw e}}
+      delete DRIVE.idx[name];const cache=await cloudCache();delete cache[name];await cloudDel(name).catch(()=>{});
+    }
+  }}
+};
+const driveAssets={
+  async upload(blob){
+    const type=blob.type||'application/octet-stream',name='f_'+uid()+uid();let id;
+    if(blob.size>GCFG.resumableOver){
+      const init=await gfetch(`${GUP}/files?uploadType=resumable&fields=id`,{method:'POST',headers:{'Content-Type':'application/json; charset=UTF-8','X-Upload-Content-Type':type,'X-Upload-Content-Length':String(blob.size)},body:JSON.stringify({name,parents:['appDataFolder']})});
+      const loc=init.headers.get('Location');if(!loc)throw gerr('upload_failed','No upload session');
+      const put=await fetch(loc,{method:'PUT',headers:{'Content-Type':type},body:blob});
+      if(!put.ok)throw gerr('drive_'+put.status,'Upload failed '+put.status);
+      id=(await put.json()).id;
+    }else{
+      const b=multipart({name,parents:['appDataFolder']},blob);
+      id=(await (await gfetch(`${GUP}/files?uploadType=multipart&fields=id`,{method:'POST',headers:{'Content-Type':'multipart/related; boundary='+b.boundary},body:b.blob})).json()).id;
+    }
+    return{id,url:'',sizeBytes:blob.size,contentType:type};
+  },
+  async delete(id){try{await gfetch(`${GAPI}/files/${id}`,{method:'DELETE'})}catch(e){if(e&&e.code==='drive_404')return{deleted:false};throw e}return{deleted:true}},
+  async list(){
+    const q=((await (await gfetch(`${GAPI}/about?fields=storageQuota`)).json()).storageQuota)||{};
+    return{assets:[],usage:{files:0,bytes:+(q.usage||0),maxBytes:+(q.limit||0),maxFiles:0}};
+  }
+};
+function syncSoon(ms,full){
+  if(!sync.col)return;
+  if(full)sync.wantFull=true;
+  clearTimeout(sync.timer);
+  sync.timer=setTimeout(()=>{const f=sync.wantFull;sync.wantFull=false;runSync(f)},ms);
+}
+async function fetchAsset(id){return await (await gfetch(`${GAPI}/files/${id}?alt=media`)).arrayBuffer()}
+function removeLocalDoc(id){
+  S.docs=S.docs.filter(x=>x.id!==id);S.annos=S.annos.filter(a=>a.doc!==id);
+  delete pdfCache[id];idbDel(id);if(S.cur===id)S.cur=null;
+}
+function deleteDoc(id){
+  const d=S.docs.find(x=>x.id===id);
+  if(d&&!d.noSync)S.dels.push({id,asset:d.asset||null});
+  removeLocalDoc(id);save();syncSoon(300,true);
+}
+function fromRemote(rd,id){
+  return{id,kind:rd.kind||'text',title:rd.title||'Untitled',author:rd.author||'',groups:Array.isArray(rd.groups)?[...rd.groups]:[],toc:Array.isArray(rd.toc)?[...rd.toc]:[],pages:rd.pages||null,words:rd.words||0,index:rd.index||'',text:'',asset:rd.asset||null,tooBig:!!rd.tooBig,added:rd.added||Date.now(),u:rd.u||0,synced:true};
+}
+async function putDoc(d){
+  const isPdf=d.kind==='pdf';
+  const words=d.words||(d.text?d.text.split(/\s+/).length:0);
+  const index=((isPdf||d.kind==='epub')?(d.index||''):(d.index||d.text||'')).slice(0,60000);
+  await sync.col.doc('d_'+d.id).set({kind:d.kind==='epub'?'epub':isPdf?'pdf':'text',title:d.title,author:d.author||'',groups:(d.groups||[]),toc:(d.toc||[]).slice(0,600).map(x=>String(x).slice(0,80)),pages:d.pages||null,words,index,asset:d.asset||null,tooBig:!!d.tooBig,added:d.added||Date.now(),u:d.u||Date.now()});
+  d.synced=true;
+}
+async function uploadDoc(d){
+  if(!sync.assets)return false;
+  let blob;
+  if(d.kind==='pdf'||d.kind==='epub'){const b=await getPdfBuf(d.id);if(!b)return false;blob=new Blob([b],{type:d.kind==='pdf'?'application/pdf':'application/json'})}
+  else{if(!d.text)return false;if(!d.kind)d.kind='text';blob=new Blob([d.text],{type:'text/plain'})}
+  if(!d.u)d.u=Date.now();
+  if(blob.size>MAXB){d.tooBig=true;d.asset=null}
+  else{
+    try{const r=await sync.assets.upload(blob);d.asset=r.id;d.tooBig=false}
+    catch(e){if(e&&e.code==='too_large'){d.tooBig=true;d.asset=null}else throw e}
+  }
+  await putDoc(d);save();return true;
+}
+async function pushDeletes(){
+  for(const x of [...S.dels]){
+    await sync.col.doc('d_'+x.id).set({deleted:true,u:Date.now()});
+    try{await sync.col.doc('m_'+x.id).delete()}catch(e){}
+    try{await sync.col.doc('k_'+x.id).delete()}catch(e){}
+    if(x.asset&&sync.assets){try{await sync.assets.delete(x.asset)}catch(e){}}
+    S.dels=S.dels.filter(y=>y.id!==x.id);save();
+  }
+}
+async function syncMarks(id,rm,pre,ink){
+  pre=pre||'m';ink=!!ink;
+  const mine=a=>a.doc===id&&(a.type==='ink')===ink;
+  const now=Date.now();
+  const local=S.annos.filter(mine);
+  local.forEach(a=>{if(!a.u)a.u=now});
+  const remoteList=rm&&rm.annos?cl(rm.annos):[];
+  const map=new Map();
+  remoteList.forEach(a=>map.set(a.id,a));
+  local.forEach(a=>{const r=map.get(a.id);if(!r||a.u>(r.u||0))map.set(a.id,a)});
+  const cutoff=now-30*864e5;
+  let merged=[...map.values()].filter(a=>!(a.del&&a.u<cutoff));
+  const canon=l=>stable(l.slice().sort((x,y)=>x.id<y.id?-1:x.id>y.id?1:0));
+  const cm=canon(merged);
+  let changedLocal=false;
+  if(cm!==canon(local)){S.annos=S.annos.filter(a=>!mine(a)).concat(merged);changedLocal=true}
+  if(cm!==canon(remoteList)){
+    if(JSON.stringify(merged).length>230000)merged=merged.filter(a=>!a.del);
+    if(JSON.stringify(merged).length>230000){const err=new Error('too many marks');err.code='marks_too_big';throw err}
+    await sync.col.doc(pre+'_'+id).set({annos:merged,u:now});
+  }
+  return changedLocal;
+}
+async function fullPass(changedDocs){
+  const snap=await sync.col.limit(1000).get();
+  const remote={};snap.docs.forEach(s=>{if(s.exists)remote[s.id]=s.data()});
+  let structural=false;
+  for(const k of Object.keys(remote)){
+    if(!k.startsWith('g_'))continue;
+    const id=k.slice(2),rg=remote[k],lg=S.groups.find(x=>x.id===id);
+    if(!lg){S.groups.push({id,name:rg.name||'Group',u:rg.u||0,del:!!rg.deleted});structural=true}
+    else if((rg.u||0)>(lg.u||0)){lg.name=rg.name||lg.name;lg.u=rg.u;lg.del=!!rg.deleted;structural=true}
+    else if((lg.u||0)>(rg.u||0))await putGroup(lg);
+  }
+  for(const lg of S.groups){if(!remote['g_'+lg.id])await putGroup(lg)}
+  const pend=new Set(S.dels.map(x=>x.id));
+  for(const k of Object.keys(remote)){
+    if(!k.startsWith('d_'))continue;
+    const id=k.slice(2),rd=remote[k],ld=S.docs.find(x=>x.id===id);
+    if(pend.has(id))continue;
+    if(rd.deleted){if(ld){removeLocalDoc(id);structural=true}continue}
+    if(!ld){S.docs.push(fromRemote(rd,id));structural=true}
+    else{
+      if((rd.u||0)>(ld.u||0)){ld.title=rd.title;ld.u=rd.u;ld.groups=Array.isArray(rd.groups)?[...rd.groups]:[];structural=true}
+      else if((ld.u||0)>(rd.u||0))await putDoc(ld);
+      if(!ld.asset&&rd.asset){ld.asset=rd.asset;ld.tooBig=!!rd.tooBig}
+      ld.synced=true;
+    }
+  }
+  const ready=[];
+  for(const d of [...S.docs]){
+    if(d.noSync)continue;
+    const rd=remote['d_'+d.id];
+    if(rd&&!rd.deleted){ready.push(d.id);continue}
+    if(!rd&&await uploadDoc(d)){ready.push(d.id);structural=true}
+  }
+  for(const id of ready){
+    if(await syncMarks(id,remote['m_'+id],'m',false))changedDocs.add(id);
+    if(await syncMarks(id,remote['k_'+id],'k',true))changedDocs.add(id);
+  }
+  if(sync.assets){try{sync.usage=(await sync.assets.list()).usage}catch(e){}}
+  return structural;
+}
+async function quickPass(changedDocs){
+  const ids=[...dirty];dirty.clear();
+  let needFull=false;
+  try{
+    for(const id of ids){
+      const d=S.docs.find(x=>x.id===id);
+      if(!d||d.noSync)continue;
+      if(!d.synced){needFull=true;continue}
+      const snap=await sync.col.doc('m_'+id).get();
+      if(await syncMarks(id,snap.exists?snap.data():null,'m',false))changedDocs.add(id);
+      if(S.annos.some(a=>a.doc===id&&a.type==='ink')){const ks=await sync.col.doc('k_'+id).get();if(await syncMarks(id,ks.exists?ks.data():null,'k',true))changedDocs.add(id)}
+    }
+  }catch(e){ids.forEach(i=>dirty.add(i));throw e}
+  if(needFull)sync.wantFull=true;
+  return false;
+}
+async function runSync(full){
+  if(!sync.col)return;
+  if(sync.running){sync.again=true;sync.againFull=sync.againFull||full;return}
+  sync.running=true;setSync('syncing','Syncing…');
+  const changedDocs=new Set();let structural=false,failed=false;
+  try{
+    await pushDeletes();
+    structural=full?await fullPass(changedDocs):await quickPass(changedDocs);
+    save();
+    sync.last=Date.now();
+    const t=new Date(sync.last).toLocaleTimeString([],{hour:'numeric',minute:'2-digit'});
+    setSync('ok','Synced '+t+(sync.usage?` · Google Drive ${fmtSize(sync.usage.bytes)}${sync.usage.maxBytes?' of '+fmtSize(sync.usage.maxBytes):''} used`:''));
+  }catch(e){
+    failed=true;
+    const c=e&&e.code;
+    setSync('error',c==='quota_exceeded'||c==='quota_or_state'?'Your Google Drive is full. Free up space and tap Sync now.':c==='marks_too_big'?'One item has too many marks or drawings to sync.':c==='resource_exhausted'||c==='rate_limited'?'Sync paused (too many requests). Retrying shortly.':c==='auth'?'Google sign-in expired. Tap Reconnect.':c==='revoked'?'Cloud access changed. Reload the page.':'Could not sync ('+(c||(e&&e.message)||'error')+'). Retrying shortly.');
+    if(c!=='revoked'&&c!=='auth')syncSoon(120000,true);
+  }finally{sync.running=false}
+  if(!failed)refreshAfterSync(changedDocs,structural);
+  if(sync.again){const f=sync.againFull;sync.again=false;sync.againFull=false;syncSoon(300,f)}
+  else if(sync.wantFull&&!failed)syncSoon(300,true);
+}
+function refreshAfterSync(changedDocs,structural){
+  if(view==='library'){if($('#list')){libTab==='notes'?renderNotesTab():libTab==='groups'?(openGroup?fillGroupBody():fillGroupsHome()):renderList()}return}
+  if(view!=='reader')return;
+  if(!doc()){view='library';hideBar();renderLibrary();return}
+  if(changedDocs.has(S.cur)){
+    const typing=document.activeElement&&document.activeElement.tagName==='TEXTAREA';
+    if(typing)return;
+    if(P){P.pages.forEach(pg=>renderAnnos(pg.n));renderPdfNotes()}
+    else if(E){rerenderChapter();renderEpubNotes()}
+    else renderReader();
+  }
+}
+
+/* ---------- Selection toolbar ---------- */
+function readSelection(){
+  if(view!=='reader'||!doc())return null;
+  const k=doc().kind;return k==='pdf'?readPdfSelection():k==='epub'?readEpubSelection():readTextSelection();
+}
+document.addEventListener('selectionchange',()=>{
+  const p=readSelection();
+  if(p){pending=p;showBar()}
+  else if(!barBusy){pending=null;hideBar()}
+});
+function showBar(){
+  const bar=$('#bar');bar.replaceChildren();
+  const seg=el('div',{class:'seg'},[['highlight','Highlight'],['underline','Underline'],['circle','Circle']].map(([k,l])=>el('button',{class:mode===k?'sel':'',text:l,onclick:()=>{mode=k;showBar()}})));
+  const sw=el('div',{class:'swatches'},COLORS.map(c=>el('button',{class:'sw'+(color===c?' sel':''),'data-c':c,'aria-label':'Mark '+c,onclick:()=>{color=c;apply(false)}})));
+  const noteBtn=el('button',{class:'primary',text:'Add note',onclick:()=>apply(true)});
+  bar.append(el('div',{class:'inner'},seg,el('div',{class:'row'},sw,noteBtn)));
+  bar.querySelectorAll('button').forEach(b=>{b.addEventListener('pointerdown',e=>{barBusy=true;e.preventDefault()});b.addEventListener('pointerup',()=>setTimeout(()=>barBusy=false,300))});
+  bar.classList.add('on');
+}
+function hideBar(){$('#bar').classList.remove('on')}
+function apply(withNote){
+  if(!pending)return;
+  if(doc().kind==='pdf')return applyPdf(withNote);
+  if(doc().kind==='epub')return applyEpub(withNote);
+  const a={id:uid(),doc:S.cur,start:pending.start,end:pending.end,type:mode,color,note:'',u:Date.now()};
+  S.annos.push(a);save();markDirty(S.cur);
+  if(withNote)openNotes.add(a.id);
+  pending=null;barBusy=false;
+  const sel=getSelection();if(sel)sel.removeAllRanges();
+  hideBar();renderReader();
+  if(withNote){const c=document.getElementById('nc-'+a.id);if(c){c.scrollIntoView({block:'center'});const t=c.querySelector('textarea');if(t)t.focus({preventScroll:true})}}
+}
+
+S=load()||seed();S.dels=S.dels||[];S.groups=S.groups||[];
+renderLibrary();
+syncInit();
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&sync.col)syncSoon(500,true)});
+})();
+</script>
+</body>
+</html>

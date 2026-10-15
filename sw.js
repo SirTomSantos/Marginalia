@@ -1,0 +1,29 @@
+// Marginalia service worker: keeps the app working offline.
+// To force every device to refresh the app files, change the version below.
+const V = 'marginalia-shell-v1';
+const SHELL = ['./', 'index.html', 'config.js', 'manifest.webmanifest', 'lib/pdf.min.js', 'lib/pdf.worker.min.js', 'lib/jszip.min.js', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png'];
+self.addEventListener('install', e => {
+  e.waitUntil(caches.open(V).then(c => c.addAll(SHELL)).then(() => self.skipWaiting()));
+});
+self.addEventListener('activate', e => {
+  e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== V && k !== 'marginalia-fonts').map(k => caches.delete(k)))).then(() => self.clients.claim()));
+});
+self.addEventListener('fetch', e => {
+  const r = e.request;
+  if (r.method !== 'GET') return;
+  const u = new URL(r.url);
+  if (u.origin === location.origin) {
+    const shell = r.mode === 'navigate' || /\/(index\.html|config\.js|sw\.js|manifest\.webmanifest)$/.test(u.pathname) || u.pathname.endsWith('/');
+    if (shell) {
+      // network first so updates arrive; fall back to the saved copy when offline
+      e.respondWith(fetch(r).then(res => { const cp = res.clone(); caches.open(V).then(c => c.put(r, cp)); return res; })
+        .catch(() => caches.match(r, { ignoreSearch: true }).then(m => m || caches.match('index.html'))));
+      return;
+    }
+    e.respondWith(caches.match(r).then(m => m || fetch(r).then(res => { const cp = res.clone(); caches.open(V).then(c => c.put(r, cp)); return res; })));
+    return;
+  }
+  if (/^fonts\.(googleapis|gstatic)\.com$/.test(u.hostname)) {
+    e.respondWith(caches.open('marginalia-fonts').then(c => c.match(r).then(m => m || fetch(r).then(res => { c.put(r, res.clone()); return res; }).catch(() => m))));
+  }
+});

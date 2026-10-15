@@ -1,9 +1,10 @@
 // Marginalia service worker: keeps the app working offline.
 // To force every device to refresh the app files, change the version below.
-const V = 'marginalia-shell-v1';
-const SHELL = ['./', 'index.html', 'config.js', 'manifest.webmanifest', 'lib/pdf.min.js', 'lib/pdf.worker.min.js', 'lib/jszip.min.js', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png'];
+const V = 'marginalia-shell-v2';
+const SHELL = ['./', 'index.html', 'config.js', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'apple-touch-icon.png'];
 self.addEventListener('install', e => {
-  e.waitUntil(caches.open(V).then(c => c.addAll(SHELL)).then(() => self.skipWaiting()));
+  // add files one by one so one missing file can never block the whole install
+  e.waitUntil(caches.open(V).then(c => Promise.all(SHELL.map(u => c.add(u).catch(() => {})))).then(() => self.skipWaiting()));
 });
 self.addEventListener('activate', e => {
   e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== V && k !== 'marginalia-fonts').map(k => caches.delete(k)))).then(() => self.clients.claim()));

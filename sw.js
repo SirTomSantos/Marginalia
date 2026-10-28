@@ -1,7 +1,7 @@
 // Marginalia service worker: keeps the app working offline.
 // It only ever deletes caches whose names start with "marginalia-", so it cannot disturb other apps on this site.
 // To force every device to refresh the app files, change the version below.
-const V = 'marginalia-shell-v2';
+const V = 'marginalia-shell-v4';
 const SHELL = ['./', 'index.html', 'config.js', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'apple-touch-icon.png'];
 self.addEventListener('install', e => {
   // add files one by one so one missing file can never block the whole install
